@@ -1,0 +1,315 @@
+/* ==============================================================================
+ * GlobeCon Convergence Solutions - Corporate Learning Portal Theme (post.scss)
+ * Modern, clean, responsive UI built on Bootstrap 5 / Boost foundations.
+ * ============================================================================== */
+
+:root {
+    --globecon-primary: #0f2942;
+    --globecon-primary-light: #1e3a8a;
+    --globecon-accent: #0284c7;
+    --globecon-accent-hover: #0369a1;
+    --globecon-bg-light: #f8fafc;
+    --globecon-surface: #ffffff;
+    --globecon-text-dark: #1e293b;
+    --globecon-text-muted: #64748b;
+    --globecon-border: #e2e8f0;
+    --globecon-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+    --globecon-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
+    --globecon-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+    --globecon-radius-sm: 6px;
+    --globecon-radius-md: 10px;
+    --globecon-radius-lg: 16px;
+}
+
+body {
+    background-color: var(--globecon-bg-light);
+    color: var(--globecon-text-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------------------
+ * 1. Global Navigation Bar & Header
+ * ------------------------------------------------------------------------------ */
+.navbar-bootswatch,
+.navbar.fixed-top,
+.primary-navigation {
+    background-color: var(--globecon-primary) !important;
+    border-bottom: 2px solid var(--globecon-accent) !important;
+    box-shadow: var(--globecon-shadow-md) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar .nav-link,
+.navbar .site-name,
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active {
+    color: #38bdf8 !important;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: var(--globecon-radius-sm);
+}
+
+.navbar .divider {
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* User Profile Menu in Navbar */
+.usermenu .dropdown-toggle {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.usermenu .dropdown-menu {
+    border-radius: var(--globecon-radius-md);
+    box-shadow: var(--globecon-shadow-lg);
+    border: 1px solid var(--globecon-border);
+}
+
+/* ------------------------------------------------------------------------------
+ * 2. Branded Login Screen
+ * ------------------------------------------------------------------------------ */
+.pagelayout-login {
+    background: linear-gradient(135deg, #091e3a 0%, #0f2942 50%, #0369a1 100%) !important;
+    min-height: 100vh;
+}
+
+.pagelayout-login #page-wrapper {
+    background: transparent !important;
+}
+
+.pagelayout-login .login-container {
+    max-width: 440px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+}
+
+.pagelayout-login .loginform {
+    background: var(--globecon-surface);
+    border-radius: var(--globecon-radius-lg);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.pagelayout-login .loginform::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--globecon-primary), var(--globecon-accent));
+}
+
+.pagelayout-login .login-logo {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.pagelayout-login .login-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--globecon-primary);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.pagelayout-login .login-subheading {
+    font-size: 0.9rem;
+    color: var(--globecon-text-muted);
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.pagelayout-login .btn-primary {
+    background-color: var(--globecon-primary) !important;
+    border-color: var(--globecon-primary) !important;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--globecon-radius-sm);
+    transition: all 0.2s ease-in-out;
+}
+
+.pagelayout-login .btn-primary:hover {
+    background-color: var(--globecon-primary-light) !important;
+    border-color: var(--globecon-primary-light) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--globecon-shadow-md);
+}
+
+/* ------------------------------------------------------------------------------
+ * 3. Learner Dashboard & Course Cards
+ * ------------------------------------------------------------------------------ */
+.dashboard-card-deck .dashboard-card,
+.block_myoverview .dashboard-card {
+    border-radius: var(--globecon-radius-md) !important;
+    border: 1px solid var(--globecon-border) !important;
+    box-shadow: var(--globecon-shadow-sm) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    background: var(--globecon-surface);
+}
+
+.dashboard-card-deck .dashboard-card:hover,
+.block_myoverview .dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--globecon-shadow-lg) !important;
+    border-color: #cbd5e1 !important;
+}
+
+.dashboard-card .dashboard-card-img {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--globecon-border);
+}
+
+.dashboard-card .dashboard-card-footer {
+    background-color: #ffffff;
+    border-top: 1px solid var(--globecon-border);
+    padding: 0.75rem 1rem;
+}
+
+/* Course Progress Bar */
+.progress {
+    height: 8px !important;
+    border-radius: 9999px !important;
+    background-color: #e2e8f0 !important;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--globecon-primary), var(--globecon-accent)) !important;
+    border-radius: 9999px !important;
+    transition: width 0.6s ease;
+}
+
+/* ------------------------------------------------------------------------------
+ * 4. Course Page Content, Modules & Activities
+ * ------------------------------------------------------------------------------ */
+.course-content ul.topics li.section,
+.course-content ul.weeks li.section {
+    background: var(--globecon-surface);
+    border-radius: var(--globecon-radius-md);
+    border: 1px solid var(--globecon-border);
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    box-shadow: var(--globecon-shadow-sm);
+}
+
+.course-content .sectionname {
+    color: var(--globecon-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.activity-item {
+    border-radius: var(--globecon-radius-sm);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.15s ease;
+}
+
+.activity-item:hover {
+    background-color: #f1f5f9;
+}
+
+/* Activity Icons */
+.activityiconcontainer {
+    border-radius: var(--globecon-radius-sm) !important;
+}
+
+/* ------------------------------------------------------------------------------
+ * 5. Announcements, Forums & Alerts
+ * ------------------------------------------------------------------------------ */
+.forumpost {
+    border-radius: var(--globecon-radius-md) !important;
+    border: 1px solid var(--globecon-border) !important;
+    box-shadow: var(--globecon-shadow-sm);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+}
+
+.forumpost .header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid var(--globecon-border);
+    padding: 0.75rem 1.25rem;
+}
+
+.alert-info {
+    background-color: #e0f2fe !important;
+    border-color: #bae6fd !important;
+    color: #0369a1 !important;
+    border-radius: var(--globecon-radius-sm);
+}
+
+/* ------------------------------------------------------------------------------
+ * 6. Calendar & Upcoming Events
+ * ------------------------------------------------------------------------------ */
+.maincalendar .calendarmonth td.hasevents {
+    background-color: #e0f2fe !important;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.eventlist .event {
+    border-left: 4px solid var(--globecon-accent) !important;
+    border-radius: var(--globecon-radius-sm);
+    box-shadow: var(--globecon-shadow-sm);
+    background: #ffffff;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+/* ------------------------------------------------------------------------------
+ * 7. Buttons and Accessibility
+ * ------------------------------------------------------------------------------ */
+.btn-primary {
+    background-color: var(--globecon-primary);
+    border-color: var(--globecon-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--globecon-primary-light);
+    border-color: var(--globecon-primary-light);
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
+    color: var(--globecon-text-dark);
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* ------------------------------------------------------------------------------
+ * 8. Responsive Breakpoints
+ * ------------------------------------------------------------------------------ */
+@media (max-width: 768px) {
+    .pagelayout-login .login-container {
+        margin: 2rem auto;
+        padding: 0 0.75rem;
+    }
+    .pagelayout-login .loginform {
+        padding: 1.5rem 1.25rem;
+    }
+    .course-content ul.topics li.section {
+        padding: 0.85rem;
+    }
+}

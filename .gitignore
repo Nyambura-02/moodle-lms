@@ -24,11 +24,9 @@ postgres_data/
 # Moodle Core Downloads & Runtime Packages (keep custom code versioned)
 *.zip
 *.tar.gz
-server/apache/logs/
-server/mariadb/data/
-server/mysql/data/
-server/php/logs/
-server/tmp/
+*.exe
+README.txt
+server/
 
 # Caches and Temporary Files
 cache/
