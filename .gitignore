@@ -1,0 +1,54 @@
+# Environment and Secret Files
+.env
+.env.local
+.env.production
+*.key
+*.pem
+*.pfx
+secrets/
+
+# Moodle Data Directories (contains user uploads, sessions, caches)
+moodledata/
+server/moodledata/
+localdata/
+data/
+
+# Database Files and Backups
+*.sql
+*.sql.gz
+*.dump
+mariadb_data/
+mysql_data/
+postgres_data/
+
+# Moodle Core Downloads & Runtime Packages (keep custom code versioned)
+*.zip
+*.tar.gz
+server/apache/logs/
+server/mariadb/data/
+server/mysql/data/
+server/php/logs/
+server/tmp/
+
+# Caches and Temporary Files
+cache/
+localcache/
+muc/
+sessions/
+temp/
+trashdir/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating System Files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE and Editor Directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

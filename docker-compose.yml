@@ -1,0 +1,67 @@
+services:
+  database:
+    image: mariadb:10.11-jammy
+    container_name: globecon_lms_db
+    restart: unless-stopped
+    command: [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--default-storage-engine=innodb",
+      "--innodb-file-per-table=1",
+      "--innodb-large-prefix=1",
+      "--innodb-buffer-pool-size=512M"
+    ]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MARIADB_ROOT_PASSWORD:-ChangeMe_RootSecret123!}
+      MYSQL_DATABASE: ${DB_NAME:-moodle}
+      MYSQL_USER: ${DB_USER:-moodleuser}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-ChangeMe_DatabaseSecret123!}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    networks:
+      - globecon_net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  moodle:
+    image: moodle:4.5-apache
+    container_name: globecon_lms_app
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      MOODLE_DATABASE_TYPE: ${DB_TYPE:-mariadb}
+      MOODLE_DATABASE_HOST: database
+      MOODLE_DATABASE_PORT_NUMBER: 3306
+      MOODLE_DATABASE_NAME: ${DB_NAME:-moodle}
+      MOODLE_DATABASE_USER: ${DB_USER:-moodleuser}
+      MOODLE_DATABASE_PASSWORD: ${DB_PASSWORD:-ChangeMe_DatabaseSecret123!}
+      MOODLE_DATABASE_PREFIX: ${DB_PREFIX:-mdl_}
+      MOODLE_URL: ${MOODLE_URL:-http://localhost:8000}
+    volumes:
+      - moodle_data:/var/www/moodledata
+      - moodle_html:/var/www/html
+      - ./theme/globecon:/var/www/html/theme/globecon:ro
+    ports:
+      - "${DOCKER_APP_PORT:-8000}:80"
+    networks:
+      - globecon_net
+
+volumes:
+  mariadb_data:
+    name: globecon_mariadb_data
+  moodle_data:
+    name: globecon_moodle_data
+  moodle_html:
+    name: globecon_moodle_html
+
+networks:
+  globecon_net:
+    name: globecon_lms_network
+    driver: bridge
