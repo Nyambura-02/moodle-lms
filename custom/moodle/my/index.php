@@ -32,6 +32,13 @@ if ($user_role === 'UNRECOGNIZED') {
 
 // 2. Handle Student Course Self-Registration and Age Update
 $action = optional_param('action', '', PARAM_ALPHAEXT);
+if ($action === 'set_age_and_enrol' && confirm_sesskey()) {
+    $selected_age = required_param('student_age', PARAM_INT);
+    require_once(__DIR__ . '/role_routing.php');
+    globecon_auto_enrol_student_by_age($USER->id, $selected_age);
+    redirect(new moodle_url('/my/', ['age_set' => $selected_age]));
+}
+
 if ($action === 'enrol_course' && confirm_sesskey()) {
     $courseid = required_param('courseid', PARAM_INT);
     $selected_age = optional_param('student_age', 0, PARAM_INT);

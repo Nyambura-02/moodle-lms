@@ -111,3 +111,96 @@ function globecon_enforce_dashboard_access($allowed_roles) {
 
     return $actual_role;
 }
+
+/**
+ * Returns the official course shortnames corresponding to a student's age (Ages 6 to 21).
+ *
+ * @param int $age
+ * @return array
+ */
+function globecon_get_unit_codes_for_age($age) {
+    $age = (int)$age;
+    if ($age <= 10) {
+        // Ages 6–10 (Junior Explorers)
+        return ['JR-CODE-101', 'SCRATCH-CT', 'ROBOTICS-PC'];
+    } else if ($age <= 14) {
+        // Ages 11–14 (Middle School Innovators)
+        return ['MS-STEM-201', 'WEB-PROG', 'ROBOTICS-PC', 'AI-CHATBOTS', 'SCRATCH-CT'];
+    } else if ($age <= 18) {
+        // Ages 15–18 (High School Scholars)
+        return ['HS-CS-301', 'PYTHON-PROG', 'WEB-PROG', 'CYBER-SEC', 'AI-CHATBOTS'];
+    } else {
+        // Ages 18–21+ (Collegiate, Young Adult & Professional)
+        return ['UNI-DEV-401', 'GC-SEC-101', 'cybersec', 'WORKPLACE-IT', 'WEB-PROG', 'CYBER-SEC'];
+    }
+}
+
+/**
+ * Automatically saves a student's age and enrolls them into all official curriculum units for that age.
+ *
+ * @param int $userid
+ * @param int $age
+ * @return array List of enrolled course fullnames
+ */
+function globecon_auto_enrol_student_by_age($userid, $age) {
+    global $DB, $CFG;
+    require_once($CFG->libdir . '/enrollib.php');
+    require_once($CFG->dirroot . '/enrol/manual/locallib.php');
+
+    $age = (int)$age;
+    if ($age < 6) $age = 6;
+    if ($age > 21) $age = 21;
+
+    // 1. Save age into user_info_data
+    $fieldid = $DB->get_field('user_info_field', 'id', ['shortname' => 'age']);
+    if ($fieldid) {
+        $age_label = "{$age} years old";
+        $existing = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $fieldid]);
+        if ($existing) {
+            $DB->set_field('user_info_data', 'data', $age_label, ['id' => $existing->id]);
+        } else {
+            $rec = new stdClass();
+            $rec->userid = $userid;
+            $rec->fieldid = $fieldid;
+            $rec->data = $age_label;
+            $rec->dataformat = 0;
+            $DB->insert_record('user_info_data', $rec);
+        }
+    }
+
+    // 2. Ensure user has student role in system context
+    $student_role_id = $DB->get_field('role', 'id', ['shortname' => 'student']);
+    if ($student_role_id) {
+        $syscontext = context_system::instance();
+        if (!$DB->record_exists('role_assignments', ['roleid' => $student_role_id, 'userid' => $userid, 'contextid' => $syscontext->id])) {
+            role_assign($student_role_id, $userid, $syscontext->id);
+        }
+    }
+
+    // 3. Retrieve courses for this age
+    $codes = globecon_get_unit_codes_for_age($age);
+    list($in_sql, $params) = $DB->get_in_or_equal($codes);
+    $courses = $DB->get_records_sql("SELECT c.id, c.shortname, c.fullname, c.idnumber FROM {course} c WHERE c.id > 1 AND c.shortname $in_sql ORDER BY c.id ASC", $params);
+
+    $enrol_plugin = enrol_get_plugin('manual');
+    $enrolled_courses = [];
+
+    foreach ($courses as $c) {
+        $instances = enrol_get_instances($c->id, true);
+        foreach ($instances as $instance) {
+            if ($instance->enrol === 'manual' && $enrol_plugin && $student_role_id) {
+                $enrol_plugin->enrol_user($instance, $userid, $student_role_id);
+                $enrolled_courses[] = [
+                    'id'        => $c->id,
+                    'shortname' => $c->shortname,
+                    'fullname'  => $c->fullname,
+                    'idnumber'  => $c->idnumber
+                ];
+                break;
+            }
+        }
+    }
+
+    return $enrolled_courses;
+}
+

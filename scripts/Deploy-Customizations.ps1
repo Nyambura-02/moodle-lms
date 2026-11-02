@@ -45,3 +45,4 @@ if ((Test-Path $PhpExe) -and (Test-Path $PurgeScript)) {
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host " Deployment Complete!" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
+

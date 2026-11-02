@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && confirm_sesskey()) {
     $email        = clean_param(trim($_POST['email'] ?? ''), PARAM_EMAIL);
     $phone        = clean_param(trim($_POST['phone'] ?? ''), PARAM_TEXT);
     $password     = trim($_POST['password'] ?? '');
+    $student_age  = clean_param($_POST['student_age'] ?? 14, PARAM_INT);
     $selected_courses = $_POST['courses'] ?? [];
     
     if ($account_role === 'student') {
@@ -110,10 +111,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && confirm_sesskey()) {
                 role_assign($roleid, $userid, $syscontext->id);
             }
 
-            // Enrol into selected courses
             $enrolled_course_names = [];
             $enrol_plugin = enrol_get_plugin('manual');
-            
+
+            // If Student: Automatically allocate all units corresponding to their age!
+            if ($account_role === 'student' && !empty($student_age)) {
+                $auto_units = globecon_auto_enrol_student_by_age($userid, $student_age);
+                foreach ($auto_units as $unit) {
+                    $enrolled_course_names[] = $unit['shortname'] . ' - ' . $unit['fullname'];
+                }
+            }
+
+            // Also enrol any additional selected courses
             if (!empty($selected_courses) && is_array($selected_courses)) {
                 foreach ($selected_courses as $cid) {
                     $cid = (int)$cid;
@@ -123,7 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && confirm_sesskey()) {
                         foreach ($instances as $instance) {
                             if ($instance->enrol === 'manual') {
                                 $enrol_plugin->enrol_user($instance, $userid, $roleid);
-                                $enrolled_course_names[] = $c_obj->fullname;
+                                $c_display = $c_obj->shortname . ' - ' . $c_obj->fullname;
+                                if (!in_array($c_display, $enrolled_course_names)) {
+                                    $enrolled_course_names[] = $c_display;
+                                }
                                 break;
                             }
                         }
@@ -136,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && confirm_sesskey()) {
                 'id'            => $userid,
                 'role'          => ($account_role === 'trainer') ? 'Trainer / Faculty Mentor' : 'Student',
                 'account_role'  => $account_role,
+                'age'           => ($account_role === 'student') ? $student_age : null,
                 'fullname'      => $firstname . ' ' . $lastname,
                 'regno'         => $regno,
                 'username'      => $username,
@@ -381,17 +394,30 @@ echo $OUTPUT->header();
                     </div>
                 </div>
 
-                <!-- Personal Name Details -->
+                <!-- Personal Name & Age Details -->
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="firstname" class="form-label fw-semibold text-dark small mb-1">First Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" required>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="lastname" class="form-label fw-semibold text-dark small mb-1">Last Name / Surname <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" required>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3" id="student_age_box">
+                        <label for="student_age" class="form-label fw-semibold text-dark small mb-1">
+                            Student Age (6–21) <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select fw-bold text-primary" id="student_age" name="student_age" onchange="autoHighlightUnits(this.value)">
+                            <?php for ($a = 6; $a <= 21; $a++): ?>
+                                <option value="<?php echo $a; ?>" <?php echo ($a == 14) ? 'selected' : ''; ?>>
+                                    <?php echo $a; ?> Years Old
+                                </option>
+                            <?php endfor; ?>
+                        </select>
+                        <div class="form-text small text-primary fw-semibold"><i class="fa fa-magic me-1"></i> Units for this age auto-allocated</div>
+                    </div>
+                    <div class="col-md-3">
                         <label for="phone" class="form-label fw-semibold text-dark small mb-1">Phone Number (Optional)</label>
                         <input type="text" class="form-control" id="phone" name="phone" placeholder="+254 7XX XXX XXX">
                     </div>
@@ -522,14 +548,17 @@ echo $OUTPUT->header();
 function toggleRoleFields(role) {
     var studentBox = document.getElementById('student_reg_box');
     var trainerBox = document.getElementById('trainer_id_box');
+    var ageBox = document.getElementById('student_age_box');
     var passField = document.getElementById('password');
     if (role === 'trainer') {
         if (studentBox) studentBox.classList.add('d-none');
         if (trainerBox) trainerBox.classList.remove('d-none');
+        if (ageBox) ageBox.classList.add('d-none');
         if (passField) passField.value = 'Trainer@2026!Pass';
     } else {
         if (studentBox) studentBox.classList.remove('d-none');
         if (trainerBox) trainerBox.classList.add('d-none');
+        if (ageBox) ageBox.classList.remove('d-none');
         if (passField) passField.value = 'Learner@2026!Pass';
     }
 }

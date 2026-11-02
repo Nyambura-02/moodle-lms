@@ -12,11 +12,34 @@ defined('MOODLE_INTERNAL') || die();
 
 global $DB, $USER, $CFG, $OUTPUT;
 
-// 1. Retrieve Current Student's Enrolled Courses ONLY
+// 1. Retrieve Student Recorded Age
+$user_age_str = $DB->get_field_sql("
+    SELECT d.data
+    FROM {user_info_data} d
+    JOIN {user_info_field} f ON f.id = d.fieldid
+    WHERE f.shortname = 'age' AND d.userid = :userid
+", ['userid' => $USER->id]);
+
+$user_age_num = 14; // Default if not yet recorded
+$age_recorded = false;
+if (!empty($user_age_str) && preg_match('/(\d+)/', $user_age_str, $matches)) {
+    $user_age_num = (int)$matches[1];
+    $age_recorded = true;
+}
+
+// 2. Retrieve Current Student's Enrolled Courses
 $my_courses = enrol_get_my_courses(['id', 'fullname', 'shortname', 'idnumber', 'summary', 'category']);
 $total_enrolled = count($my_courses);
 
-// 2. Retrieve Assigned Trainer Name for Each Enrolled Course
+// 3. If no courses enrolled yet, automatically allocate all units for student's age!
+if ($total_enrolled === 0 && $user_age_num > 0) {
+    require_once($CFG->dirroot . '/my/role_routing.php');
+    globecon_auto_enrol_student_by_age($USER->id, $user_age_num);
+    $my_courses = enrol_get_my_courses(['id', 'fullname', 'shortname', 'idnumber', 'summary', 'category']);
+    $total_enrolled = count($my_courses);
+}
+
+// 4. Retrieve Assigned Trainer Name for Each Enrolled Course
 $enrolled_trainers = [];
 foreach ($my_courses as $c) {
     $context = context_course::instance($c->id);
@@ -32,19 +55,6 @@ foreach ($my_courses as $c) {
         }
     }
     $enrolled_trainers[$c->id] = empty($tnames) ? 'GlobeCon Certified Trainer' : implode(', ', array_unique($tnames));
-}
-
-// 3. Retrieve Student Recorded Age
-$user_age_str = $DB->get_field_sql("
-    SELECT d.data
-    FROM {user_info_data} d
-    JOIN {user_info_field} f ON f.id = d.fieldid
-    WHERE f.shortname = 'age' AND d.userid = :userid
-", ['userid' => $USER->id]);
-
-$user_age_num = 14; // Default if not yet recorded
-if (!empty($user_age_str) && preg_match('/(\d+)/', $user_age_str, $matches)) {
-    $user_age_num = (int)$matches[1];
 }
 
 // 4. Prepare All Available Courses & Trainers for Age-Based Registration
@@ -259,6 +269,7 @@ $just_enrolled_name = '';
 if ($just_enrolled_id > 0) {
     $just_enrolled_name = $DB->get_field('course', 'fullname', ['id' => $just_enrolled_id]);
 }
+$age_set_val = optional_param('age_set', 0, PARAM_INT);
 ?>
 
 <div class="globecon-role-dashboard student-dashboard container-fluid py-2">
@@ -301,6 +312,18 @@ if ($just_enrolled_id > 0) {
             <div>
                 <div class="fw-bold text-success">Registration Successful!</div>
                 <div class="small text-dark">You have been successfully enrolled in <strong><?php echo s($just_enrolled_name); ?></strong>. Your classroom and assignments are ready below.</div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($age_set_val)): ?>
+        <div class="alert alert-success border-0 rounded-4 shadow-sm p-3 mb-4 d-flex align-items-center gap-3">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                <i class="fa fa-magic fs-5"></i>
+            </div>
+            <div>
+                <div class="fw-bold text-success">Units Auto-Allocated for Age <?php echo $age_set_val; ?>!</div>
+                <div class="small text-dark">Your dashboard has been automatically updated with all the prescribed learning units and assigned trainers for your age group.</div>
             </div>
         </div>
     <?php endif; ?>
@@ -394,7 +417,7 @@ if ($just_enrolled_id > 0) {
                         </h5>
                         <p class="text-muted small mb-0">Select your age to see only the courses designed for your age group and their trainers</p>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
                         <label for="ageDropdown" class="small fw-bold text-muted text-nowrap">Your Age:</label>
                         <select id="ageDropdown" class="form-select form-select-sm rounded-pill px-3" style="width: 140px;" onchange="globeconFilterAge(this.value)">
                             <?php for ($a = 6; $a <= 21; $a++): ?>
@@ -403,6 +426,9 @@ if ($just_enrolled_id > 0) {
                                 </option>
                             <?php endfor; ?>
                         </select>
+                        <a href="<?php echo $CFG->wwwroot; ?>/my/?action=set_age_and_enrol&student_age=<?php echo $user_age_num; ?>&sesskey=<?php echo sesskey(); ?>" id="autoEnrolAgeBtn" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm fw-semibold">
+                            <i class="fa fa-bolt me-1"></i> Auto-Enrol All Units for Age <span id="autoAgeNum"><?php echo $user_age_num; ?></span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -730,5 +756,18 @@ function globeconSelectTier(tierKey, ageVal) {
             link.setAttribute('href', updated);
         }
     });
+
+    // 5. Update auto-enrol all units button
+    var autoAgeBtn = document.getElementById('autoEnrolAgeBtn');
+    var autoAgeSpan = document.getElementById('autoAgeNum');
+    if (autoAgeSpan) {
+        autoAgeSpan.innerText = ageVal || 14;
+    }
+    if (autoAgeBtn) {
+        var autoHref = autoAgeBtn.getAttribute('href');
+        if (autoHref) {
+            autoAgeBtn.setAttribute('href', autoHref.replace(/student_age=\d+/, 'student_age=' + (ageVal || 14)));
+        }
+    }
 }
 </script>

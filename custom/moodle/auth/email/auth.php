@@ -152,16 +152,20 @@ class auth_plugin_email extends auth_plugin_base {
             role_assign($student_role_id, $user->id, context_system::instance()->id);
         }
 
-        // Auto-enrol into Course 2 (GlobeCon Fundamentals)
-        require_once($CFG->libdir . '/enrollib.php');
-        $enrol_plugin = enrol_get_plugin('manual');
-        $instances = enrol_get_instances(2, true);
-        foreach ($instances as $instance) {
-            if ($instance->enrol === 'manual' && $enrol_plugin && $student_role_id) {
-                $enrol_plugin->enrol_user($instance, $user->id, $student_role_id);
-                break;
-            }
+        // Determine student age and automatically enroll them into all units for that age
+        require_once($CFG->dirroot . '/my/role_routing.php');
+        $student_age = 14;
+        $age_str = $DB->get_field_sql("
+            SELECT d.data 
+            FROM {user_info_data} d 
+            JOIN {user_info_field} f ON f.id = d.fieldid 
+            WHERE f.shortname = 'age' AND d.userid = :userid
+        ", ['userid' => $user->id]);
+        if (!empty($age_str) && preg_match('/(\d+)/', $age_str, $m)) {
+            $student_age = (int)$m[1];
         }
+
+        $allocated_units = globecon_auto_enrol_student_by_age($user->id, $student_age);
 
         // Auto-confirm registered users immediately (Zero email dependency)
         $DB->set_field('user', 'confirmed', 1, array('id' => $user->id));
@@ -186,11 +190,21 @@ class auth_plugin_email extends auth_plugin_base {
             echo '          <div class="mb-2"><span class="text-muted small text-uppercase fw-semibold">Your Student Registration Number:</span>';
             echo '              <div class="fs-4 fw-bold text-primary font-monospace">' . s($user->idnumber) . '</div>';
             echo '          </div>';
+            echo '          <div class="mb-2"><span class="text-muted small text-uppercase fw-semibold">Registered Age:</span>';
+            echo '              <div class="fw-bold text-dark">' . s($student_age) . ' Years Old</div>';
+            echo '          </div>';
+            echo '          <div class="mb-3"><span class="text-muted small text-uppercase fw-semibold">Automatically Allocated Units for Age ' . s($student_age) . ':</span>';
+            echo '              <div class="mt-1">';
+            foreach ($allocated_units as $unit) {
+                echo '          <div class="badge bg-white text-dark border p-2 mb-1 me-1 text-wrap text-start d-block font-monospace"><i class="fa fa-book text-primary me-1"></i> ' . s($unit['shortname']) . ' - ' . s($unit['fullname']) . '</div>';
+            }
+            echo '              </div>';
+            echo '          </div>';
             echo '          <div class="mb-2"><span class="text-muted small text-uppercase fw-semibold">Registered Email Address:</span>';
             echo '              <div class="fw-bold text-dark">' . s($user->email) . '</div>';
             echo '          </div>';
             echo '          <div><span class="text-muted small text-uppercase fw-semibold">Login Instructions:</span>';
-            echo '              <div class="small text-secondary">You can sign in using your <strong>Student Registration Number (' . s($user->idnumber) . ')</strong> or your <strong>Email</strong> and the password you created during signup.</div>';
+            echo '              <div class="small text-secondary">Sign in using your <strong>Student Registration Number (' . s($user->idnumber) . ')</strong> or <strong>Email</strong> with your password to access your allocated units immediately.</div>';
             echo '          </div>';
             echo '      </div>';
             echo '      <div class="d-grid gap-2">';
