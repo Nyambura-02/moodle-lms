@@ -339,11 +339,9 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
             </div>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-primary rounded-pill px-3 py-2"><?php echo $total_enrolled; ?> Enrolled</span>
-                <?php if ($total_enrolled > 0): ?>
-                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#registerCourseSection" aria-expanded="false" aria-controls="registerCourseSection">
-                        <i class="fa fa-plus me-1"></i> Register for Another Course
-                    </button>
-                <?php endif; ?>
+                <a href="#registerCourseSection" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
+                    <i class="fa fa-book me-1"></i> Browse &amp; Register for Units
+                </a>
             </div>
         </div>
         <div class="card-body px-4">
@@ -406,8 +404,8 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
         </div>
     </div>
 
-    <!-- 2. COURSE REGISTRATION & AGE FILTER (Shown when 0 courses OR toggled) -->
-    <div class="collapse <?php echo ($total_enrolled === 0) ? 'show' : ''; ?> mb-4" id="registerCourseSection">
+    <!-- 2. COURSE REGISTRATION & AGE FILTER (Always open and visible) -->
+    <div class="mb-4" id="registerCourseSection">
         <div class="card border-0 shadow-sm rounded-4 bg-white border-start border-4 border-primary">
             <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -426,9 +424,14 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
                                 </option>
                             <?php endfor; ?>
                         </select>
-                        <a href="<?php echo $CFG->wwwroot; ?>/my/?action=set_age_and_enrol&student_age=<?php echo $user_age_num; ?>&sesskey=<?php echo sesskey(); ?>" id="autoEnrolAgeBtn" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm fw-semibold">
-                            <i class="fa fa-bolt me-1"></i> Auto-Enrol All Units for Age <span id="autoAgeNum"><?php echo $user_age_num; ?></span>
-                        </a>
+                        <form method="post" action="<?php echo $CFG->wwwroot; ?>/my/" class="d-inline m-0 p-0" id="autoEnrolAgeForm">
+                            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                            <input type="hidden" name="action" value="set_age_and_enrol">
+                            <input type="hidden" name="student_age" id="autoEnrolAgeInput" value="<?php echo $user_age_num; ?>">
+                            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm fw-semibold" id="autoEnrolAgeBtn">
+                                <i class="fa fa-bolt me-1"></i> Auto-Enrol All Units for Age <span id="autoAgeNum"><?php echo $user_age_num; ?></span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -490,11 +493,15 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
                                                     <i class="fa fa-check-circle me-1"></i> Already Registered
                                                 </a>
                                             <?php else: ?>
-                                                <a href="<?php echo $CFG->wwwroot; ?>/my/?action=enrol_course&courseid=<?php echo $course['id']; ?>&student_age=<?php echo $user_age_num; ?>&sesskey=<?php echo sesskey(); ?>" 
-                                                   class="btn btn-sm btn-primary w-100 rounded-pill fw-semibold shadow-sm enrol-action-link"
-                                                   data-courseid="<?php echo $course['id']; ?>">
-                                                    <i class="fa fa-plus-circle me-1"></i> Register for this Course
-                                                </a>
+                                                <form method="post" action="<?php echo $CFG->wwwroot; ?>/my/" class="m-0 p-0 enrol-course-form">
+                                                    <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                                                    <input type="hidden" name="action" value="enrol_course">
+                                                    <input type="hidden" name="courseid" value="<?php echo $course['id']; ?>">
+                                                    <input type="hidden" name="student_age" value="<?php echo $tier['min']; ?>" class="input-student-age">
+                                                    <button type="submit" class="btn btn-sm btn-primary w-100 rounded-pill fw-semibold shadow-sm">
+                                                        <i class="fa fa-plus-circle me-1"></i> Register for this Course
+                                                    </button>
+                                                </form>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -509,30 +516,23 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
     </div>
 
     <!-- 3. MAIN DASHBOARD: ASSIGNMENTS & CALENDAR -->
-    <div class="row g-4">
-        
-        <!-- LEFT COLUMN: ASSIGNMENTS & COURSEWORK -->
-        <div class="col-lg-7">
-            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="fw-bold text-dark mb-0">
-                            <i class="fa fa-tasks text-primary me-2"></i> Assignments &amp; Coursework Tasks
-                        </h5>
-                        <p class="text-muted small mb-0">Pending submissions, upcoming lab assignments, and assessments</p>
-                    </div>
-                    <span class="badge bg-primary rounded-pill px-3 py-2"><?php echo count($student_assignments); ?> Active</span>
-                </div>
-                <div class="card-body px-4">
-                    <?php if (empty($student_assignments)): ?>
-                        <div class="text-center py-5">
-                            <div class="bg-light rounded-circle d-inline-flex p-3 text-success mb-3 fs-2">
-                                <i class="fa fa-check-circle"></i>
-                            </div>
-                            <h6 class="fw-bold text-dark">No Pending Assignments</h6>
-                            <p class="text-muted small mb-0">You are all caught up on your assignments and assessments!</p>
+    <?php if (!empty($student_assignments)): ?>
+        <!-- Two-column view: Assignments present -->
+        <div class="row g-4">
+            
+            <!-- LEFT COLUMN: ASSIGNMENTS & COURSEWORK (Only displayed when student actually has assignments) -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">
+                                <i class="fa fa-tasks text-primary me-2"></i> Assignments &amp; Coursework Tasks
+                            </h5>
+                            <p class="text-muted small mb-0">Pending submissions, upcoming lab assignments, and assessments</p>
                         </div>
-                    <?php else: ?>
+                        <span class="badge bg-primary rounded-pill px-3 py-2"><?php echo count($student_assignments); ?> Active</span>
+                    </div>
+                    <div class="card-body px-4">
                         <div class="list-group list-group-flush gap-3">
                             <?php foreach ($student_assignments as $task): ?>
                                 <div class="list-group-item border rounded-4 p-3 bg-light bg-opacity-50">
@@ -579,123 +579,230 @@ $age_set_val = optional_param('age_set', 0, PARAM_INT);
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                    <?php endif; ?>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- RIGHT COLUMN: CALENDAR & DEADLINES -->
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="fw-bold text-dark mb-0">
-                            <i class="fa fa-calendar text-primary me-2"></i> Academic Calendar
-                        </h5>
-                        <p class="text-muted small mb-0"><?php echo s($cal_month_title); ?> (Africa / Nairobi)</p>
-                    </div>
-                    <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                        Full Calendar
-                    </a>
-                </div>
-                <div class="card-body px-4">
-
-                    <!-- Visual Monthly Calendar Grid -->
-                    <div class="p-3 bg-light rounded-4 mb-4 border">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <strong class="text-dark"><?php echo s($cal_month_title); ?></strong>
-                            <span class="badge bg-white text-primary border small">Today: <?php echo date('M j, Y', $now_ts); ?></span>
+            <!-- RIGHT COLUMN: CALENDAR & DEADLINES -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">
+                                <i class="fa fa-calendar text-primary me-2"></i> Academic Calendar
+                            </h5>
+                            <p class="text-muted small mb-0"><?php echo s($cal_month_title); ?> (Africa / Nairobi)</p>
                         </div>
-                        <table class="table table-borderless text-center mb-0 small" style="table-layout: fixed;">
-                            <thead>
-                                <tr class="text-muted text-uppercase" style="font-size: 0.72rem;">
-                                    <th>Su</th>
-                                    <th>Mo</th>
-                                    <th>Tu</th>
-                                    <th>We</th>
-                                    <th>Th</th>
-                                    <th>Fr</th>
-                                    <th>Sa</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $day_cursor = 1;
-                                $row_started = false;
-                                for ($week = 0; $week < 6; $week++) {
-                                    echo "<tr>";
-                                    for ($dow = 0; $dow < 7; $dow++) {
-                                        if ($week === 0 && $dow < $cal_start_wday) {
-                                            echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
-                                        } else if ($day_cursor <= $cal_days_count) {
-                                            $is_today = ($day_cursor === $cal_today);
-                                            $has_event = isset($event_days[$day_cursor]);
-                                            
-                                            $class = "py-1 ";
-                                            $style = "width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 600;";
-                                            
-                                            if ($is_today) {
-                                                $style .= " background-color: #2563eb; color: #ffffff;";
-                                            } else if ($has_event) {
-                                                $style .= " background-color: #fee2e2; color: #dc2626; border: 1px solid #f87171;";
+                        <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            Full Calendar
+                        </a>
+                    </div>
+                    <div class="card-body px-4">
+
+                        <!-- Visual Monthly Calendar Grid -->
+                        <div class="p-3 bg-light rounded-4 mb-4 border">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <strong class="text-dark"><?php echo s($cal_month_title); ?></strong>
+                                <span class="badge bg-white text-primary border small">Today: <?php echo date('M j, Y', $now_ts); ?></span>
+                            </div>
+                            <table class="table table-borderless text-center mb-0 small" style="table-layout: fixed;">
+                                <thead>
+                                    <tr class="text-muted text-uppercase" style="font-size: 0.72rem;">
+                                        <th>Su</th>
+                                        <th>Mo</th>
+                                        <th>Tu</th>
+                                        <th>We</th>
+                                        <th>Th</th>
+                                        <th>Fr</th>
+                                        <th>Sa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $day_cursor = 1;
+                                    $row_started = false;
+                                    for ($week = 0; $week < 6; $week++) {
+                                        echo "<tr>";
+                                        for ($dow = 0; $dow < 7; $dow++) {
+                                            if ($week === 0 && $dow < $cal_start_wday) {
+                                                echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
+                                            } else if ($day_cursor <= $cal_days_count) {
+                                                $is_today = ($day_cursor === $cal_today);
+                                                $has_event = isset($event_days[$day_cursor]);
+                                                
+                                                $class = "py-1 ";
+                                                $style = "width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 600;";
+                                                
+                                                if ($is_today) {
+                                                    $style .= " background-color: #2563eb; color: #ffffff;";
+                                                } else if ($has_event) {
+                                                    $style .= " background-color: #fee2e2; color: #dc2626; border: 1px solid #f87171;";
+                                                } else {
+                                                    $style .= " color: #334155;";
+                                                }
+                                                
+                                                echo "<td><span style='{$style}'>{$day_cursor}</span></td>";
+                                                $day_cursor++;
                                             } else {
-                                                $style .= " color: #334155;";
+                                                echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
                                             }
-                                            
-                                            echo "<td><span style='{$style}'>{$day_cursor}</span></td>";
-                                            $day_cursor++;
-                                        } else {
-                                            echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
+                                        }
+                                        echo "</tr>";
+                                        if ($day_cursor > $cal_days_count) {
+                                            break;
                                         }
                                     }
-                                    echo "</tr>";
-                                    if ($day_cursor > $cal_days_count) {
-                                        break;
-                                    }
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-center gap-3 mt-3 pt-2 border-top small" style="font-size: 0.78rem;">
-                            <span><span class="badge rounded-circle p-1 me-1" style="background-color: #2563eb;">&nbsp;</span> Today</span>
-                            <span><span class="badge rounded-circle p-1 me-1" style="background-color: #dc2626;">&nbsp;</span> Deadlines / Events</span>
+                                    ?>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center gap-3 mt-3 pt-2 border-top small" style="font-size: 0.78rem;">
+                                <span><span class="badge rounded-circle p-1 me-1" style="background-color: #2563eb;">&nbsp;</span> Today</span>
+                                <span><span class="badge rounded-circle p-1 me-1" style="background-color: #dc2626;">&nbsp;</span> Deadlines / Events</span>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Schedule / Deadlines List -->
+                        <h6 class="fw-bold text-dark mb-2 small text-uppercase">Upcoming Schedule &amp; Deadlines</h6>
+                        <?php if (empty($calendar_events) && empty($student_assignments)): ?>
+                            <p class="text-muted small mb-0">No upcoming calendar events scheduled.</p>
+                        <?php else: ?>
+                            <div class="list-group list-group-flush small">
+                                <?php foreach ($student_assignments as $task): ?>
+                                    <?php if ($task['duedate'] > 0 && !$task['is_submitted']): ?>
+                                        <a href="<?php echo $task['url']; ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-2">
+                                            <div>
+                                                <div class="fw-bold text-dark text-truncate" style="max-width: 240px;"><?php echo s($task['name']); ?></div>
+                                                <div class="text-muted" style="font-size: 0.75rem;"><?php echo s($task['courseshortname']); ?> &bull; Due <?php echo date('M j, g:i A', $task['duedate']); ?></div>
+                                            </div>
+                                            <span class="badge bg-warning text-dark rounded-pill">Due</span>
+                                        </a>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                                <?php foreach ($calendar_events as $ev): ?>
+                                    <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php?view=event&id=<?php echo $ev->id; ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-2">
+                                        <div>
+                                            <div class="fw-bold text-dark text-truncate" style="max-width: 240px;"><?php echo s($ev->name); ?></div>
+                                            <div class="text-muted" style="font-size: 0.75rem;"><?php echo s($ev->courseshortname ?: 'GlobeCon Event'); ?> &bull; <?php echo date('M j, g:i A', $ev->timestart); ?></div>
+                                        </div>
+                                        <span class="badge bg-primary text-white rounded-pill">Event</span>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <?php else: ?>
+        <!-- Full-width view: No assignments currently active (Assignments card hidden) -->
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">
+                                <i class="fa fa-calendar text-primary me-2"></i> Academic Calendar
+                            </h5>
+                            <p class="text-muted small mb-0"><?php echo s($cal_month_title); ?> (Africa / Nairobi)</p>
+                        </div>
+                        <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            Full Calendar
+                        </a>
+                    </div>
+                    <div class="card-body px-4">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-lg-7">
+                                <!-- Visual Monthly Calendar Grid -->
+                                <div class="p-3 bg-light rounded-4 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <strong class="text-dark"><?php echo s($cal_month_title); ?></strong>
+                                        <span class="badge bg-white text-primary border small">Today: <?php echo date('M j, Y', $now_ts); ?></span>
+                                    </div>
+                                    <table class="table table-borderless text-center mb-0 small" style="table-layout: fixed;">
+                                        <thead>
+                                            <tr class="text-muted text-uppercase" style="font-size: 0.72rem;">
+                                                <th>Su</th>
+                                                <th>Mo</th>
+                                                <th>Tu</th>
+                                                <th>We</th>
+                                                <th>Th</th>
+                                                <th>Fr</th>
+                                                <th>Sa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $day_cursor = 1;
+                                            $row_started = false;
+                                            for ($week = 0; $week < 6; $week++) {
+                                                echo "<tr>";
+                                                for ($dow = 0; $dow < 7; $dow++) {
+                                                    if ($week === 0 && $dow < $cal_start_wday) {
+                                                        echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
+                                                    } else if ($day_cursor <= $cal_days_count) {
+                                                        $is_today = ($day_cursor === $cal_today);
+                                                        $has_event = isset($event_days[$day_cursor]);
+                                                        
+                                                        $class = "py-1 ";
+                                                        $style = "width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 600;";
+                                                        
+                                                        if ($is_today) {
+                                                            $style .= " background-color: #2563eb; color: #ffffff;";
+                                                        } else if ($has_event) {
+                                                            $style .= " background-color: #fee2e2; color: #dc2626; border: 1px solid #f87171;";
+                                                        } else {
+                                                            $style .= " color: #334155;";
+                                                        }
+                                                        
+                                                        echo "<td><span style='{$style}'>{$day_cursor}</span></td>";
+                                                        $day_cursor++;
+                                                    } else {
+                                                        echo "<td class='text-muted' style='opacity: 0.3;'>&bull;</td>";
+                                                    }
+                                                }
+                                                echo "</tr>";
+                                                if ($day_cursor > $cal_days_count) {
+                                                    break;
+                                                }
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center gap-3 mt-3 pt-2 border-top small" style="font-size: 0.78rem;">
+                                        <span><span class="badge rounded-circle p-1 me-1" style="background-color: #2563eb;">&nbsp;</span> Today</span>
+                                        <span><span class="badge rounded-circle p-1 me-1" style="background-color: #dc2626;">&nbsp;</span> Deadlines / Events</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <h6 class="fw-bold text-dark mb-2 small text-uppercase">Upcoming Schedule &amp; Deadlines</h6>
+                                <?php if (empty($calendar_events)): ?>
+                                    <div class="p-4 bg-light rounded-4 text-center border">
+                                        <i class="fa fa-calendar-check-o text-muted fs-3 mb-2 d-block"></i>
+                                        <p class="text-muted small mb-0">No upcoming coursework deadlines or scheduled events.</p>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="list-group list-group-flush small">
+                                        <?php foreach ($calendar_events as $ev): ?>
+                                            <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php?view=event&id=<?php echo $ev->id; ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-2">
+                                                <div>
+                                                    <div class="fw-bold text-dark text-truncate" style="max-width: 260px;"><?php echo s($ev->name); ?></div>
+                                                    <div class="text-muted" style="font-size: 0.75rem;"><?php echo s($ev->courseshortname ?: 'GlobeCon Event'); ?> &bull; <?php echo date('M j, g:i A', $ev->timestart); ?></div>
+                                                </div>
+                                                <span class="badge bg-primary text-white rounded-pill">Event</span>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Upcoming Schedule / Deadlines List -->
-                    <h6 class="fw-bold text-dark mb-2 small text-uppercase">Upcoming Schedule &amp; Deadlines</h6>
-                    <?php if (empty($calendar_events) && empty($student_assignments)): ?>
-                        <p class="text-muted small mb-0">No upcoming calendar events scheduled.</p>
-                    <?php else: ?>
-                        <div class="list-group list-group-flush small">
-                            <?php foreach ($student_assignments as $task): ?>
-                                <?php if ($task['duedate'] > 0 && !$task['is_submitted']): ?>
-                                    <a href="<?php echo $task['url']; ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-2">
-                                        <div>
-                                            <div class="fw-bold text-dark text-truncate" style="max-width: 240px;"><?php echo s($task['name']); ?></div>
-                                            <div class="text-muted" style="font-size: 0.75rem;"><?php echo s($task['courseshortname']); ?> &bull; Due <?php echo date('M j, g:i A', $task['duedate']); ?></div>
-                                        </div>
-                                        <span class="badge bg-warning text-dark rounded-pill">Due</span>
-                                    </a>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                            <?php foreach ($calendar_events as $ev): ?>
-                                <a href="<?php echo $CFG->wwwroot; ?>/calendar/view.php?view=event&id=<?php echo $ev->id; ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-2">
-                                    <div>
-                                        <div class="fw-bold text-dark text-truncate" style="max-width: 240px;"><?php echo s($ev->name); ?></div>
-                                        <div class="text-muted" style="font-size: 0.75rem;"><?php echo s($ev->courseshortname ?: 'GlobeCon Event'); ?> &bull; <?php echo date('M j, g:i A', $ev->timestart); ?></div>
-                                    </div>
-                                    <span class="badge bg-primary text-white rounded-pill">Event</span>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-
                 </div>
             </div>
         </div>
-
-    </div>
+    <?php endif; ?>
 
 </div>
 
@@ -747,27 +854,28 @@ function globeconSelectTier(tierKey, ageVal) {
         }
     }
 
-    // 4. Update the student_age parameter in enrol links
+    // 4. Update the student_age parameter in enrol forms & links
+    var ageInputs = document.querySelectorAll('.input-student-age');
+    ageInputs.forEach(function(inp) {
+        inp.value = ageVal || 14;
+    });
+
     var enrolLinks = document.querySelectorAll('.enrol-action-link');
     enrolLinks.forEach(function(link) {
         var href = link.getAttribute('href');
         if (href) {
-            var updated = href.replace(/student_age=\d+/, 'student_age=' + (ageVal || 14));
-            link.setAttribute('href', updated);
+            link.setAttribute('href', href.replace(/student_age=\d+/, 'student_age=' + (ageVal || 14)));
         }
     });
 
-    // 5. Update auto-enrol all units button
-    var autoAgeBtn = document.getElementById('autoEnrolAgeBtn');
+    // 5. Update auto-enrol all units form
+    var autoAgeInput = document.getElementById('autoEnrolAgeInput');
     var autoAgeSpan = document.getElementById('autoAgeNum');
     if (autoAgeSpan) {
         autoAgeSpan.innerText = ageVal || 14;
     }
-    if (autoAgeBtn) {
-        var autoHref = autoAgeBtn.getAttribute('href');
-        if (autoHref) {
-            autoAgeBtn.setAttribute('href', autoHref.replace(/student_age=\d+/, 'student_age=' + (ageVal || 14)));
-        }
+    if (autoAgeInput) {
+        autoAgeInput.value = ageVal || 14;
     }
 }
 </script>

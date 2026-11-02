@@ -154,7 +154,18 @@ function globecon_auto_enrol_student_by_age($userid, $age) {
     // 1. Save age into user_info_data
     $fieldid = $DB->get_field('user_info_field', 'id', ['shortname' => 'age']);
     if ($fieldid) {
+        $field_param1 = $DB->get_field('user_info_field', 'param1', ['id' => $fieldid]);
         $age_label = "{$age} years old";
+        if (!empty($field_param1)) {
+            $lines = explode("\n", str_replace("\r", "", $field_param1));
+            foreach ($lines as $line) {
+                $trimline = trim($line);
+                if (preg_match('/^' . $age . '\s+years?\s+old/i', $trimline)) {
+                    $age_label = $trimline;
+                    break;
+                }
+            }
+        }
         $existing = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $fieldid]);
         if ($existing) {
             $DB->set_field('user_info_data', 'data', $age_label, ['id' => $existing->id]);
@@ -177,12 +188,20 @@ function globecon_auto_enrol_student_by_age($userid, $age) {
         }
     }
 
+    $enrol_plugin = enrol_get_plugin('manual');
+
+    // If student is under 18, ensure they are not accidentally enrolled in Course 2 (Corporate Security)
+    if ($age < 18 && $enrol_plugin) {
+        $inst2 = $DB->get_record('enrol', ['courseid' => 2, 'enrol' => 'manual']);
+        if ($inst2) {
+            $enrol_plugin->unenrol_user($inst2, $userid);
+        }
+    }
+
     // 3. Retrieve courses for this age
     $codes = globecon_get_unit_codes_for_age($age);
     list($in_sql, $params) = $DB->get_in_or_equal($codes);
     $courses = $DB->get_records_sql("SELECT c.id, c.shortname, c.fullname, c.idnumber FROM {course} c WHERE c.id > 1 AND c.shortname $in_sql ORDER BY c.id ASC", $params);
-
-    $enrol_plugin = enrol_get_plugin('manual');
     $enrolled_courses = [];
 
     foreach ($courses as $c) {

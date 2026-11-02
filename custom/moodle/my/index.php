@@ -47,14 +47,26 @@ if ($action === 'enrol_course' && confirm_sesskey()) {
     if ($selected_age > 0) {
         $fieldid = $DB->get_field('user_info_field', 'id', ['shortname' => 'age']);
         if ($fieldid) {
+            $field_param1 = $DB->get_field('user_info_field', 'param1', ['id' => $fieldid]);
+            $age_label = "{$selected_age} years old";
+            if (!empty($field_param1)) {
+                $lines = explode("\n", str_replace("\r", "", $field_param1));
+                foreach ($lines as $line) {
+                    $trimline = trim($line);
+                    if (preg_match('/^' . $selected_age . '\s+years?\s+old/i', $trimline)) {
+                        $age_label = $trimline;
+                        break;
+                    }
+                }
+            }
             $existing = $DB->get_record('user_info_data', ['userid' => $USER->id, 'fieldid' => $fieldid]);
             if ($existing) {
-                $DB->set_field('user_info_data', 'data', (string)$selected_age, ['id' => $existing->id]);
+                $DB->set_field('user_info_data', 'data', $age_label, ['id' => $existing->id]);
             } else {
                 $rec = new stdClass();
                 $rec->userid = $USER->id;
                 $rec->fieldid = $fieldid;
-                $rec->data = (string)$selected_age;
+                $rec->data = $age_label;
                 $rec->dataformat = 0;
                 $DB->insert_record('user_info_data', $rec);
             }
@@ -64,9 +76,26 @@ if ($action === 'enrol_course' && confirm_sesskey()) {
     // Enrol user into course as student
     require_once($CFG->dirroot . '/enrol/manual/locallib.php');
     $enrol = enrol_get_plugin('manual');
+    $student_role = $DB->get_record('role', ['shortname' => 'student']);
+    $roleid = $student_role ? $student_role->id : 5;
     $instance = $DB->get_record('enrol', ['courseid' => $courseid, 'enrol' => 'manual', 'status' => 0]);
-    if ($instance) {
-        $enrol->enrol_user($instance, $USER->id, 5); // 5 = student role
+    if (!$instance) {
+        $instances = enrol_get_instances($courseid, true);
+        foreach ($instances as $inst) {
+            if ($inst->enrol === 'manual') {
+                $instance = $inst;
+                break;
+            }
+        }
+    }
+    if ($instance && $enrol) {
+        $enrol->enrol_user($instance, $USER->id, $roleid);
+    }
+    
+    // Ensure role assignment in course context
+    $coursecontext = context_course::instance($courseid);
+    if (!is_enrolled($coursecontext, $USER->id)) {
+        role_assign($roleid, $USER->id, $coursecontext->id);
     }
     
     redirect(new moodle_url('/my/', ['enrolled' => $courseid]));
