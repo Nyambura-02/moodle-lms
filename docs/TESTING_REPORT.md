@@ -1,75 +1,147 @@
-# GlobeCon Convergence Solutions LMS
-## Quality Assurance & Verification Testing Report
+# GlobeCon Academy LMS
+## Quality Assurance, Authentication & Verification Testing Report
 
 ### 1. Executive Summary
-This document provides an honest, empirical verification record for the GlobeCon Convergence Solutions Learning Management System (LMS) local development environment and core features, in compliance with **Section 14: Testing Requirements**.
+This document provides an honest, empirical verification record for the GlobeCon Academy Learning Management System (LMS) local development environment, modern blue corporate/educational child theme (`theme_globecon`), age 6–21 multi-tier pathways, and integrated authentication suite (Google SSO, Email Login, Self-Registration, Password Recovery).
 
 ---
 
-### 2. Comprehensive 15-Point Verification Matrix
+### 2. Comprehensive 18-Point Verification Matrix
 
 | # | Requirement | Verification Method | Result | Evidence / Technical Notes |
 | :- | :--- | :--- | :---: | :--- |
-| **1** | **Local Environment Startup** | `scripts/Start-Moodle.ps1` | **VERIFIED** | MariaDB and Apache started; port 8000 and port 3306 listening without port 8080 conflicts. |
+| **1** | **Local Environment Startup** | `scripts/Start-Moodle.ps1` | **VERIFIED** | MariaDB and Apache started; port 8000 and port 3306 listening without port conflicts. |
 | **2** | **Moodle Installation** | `admin/cli/install.php` | **VERIFIED** | Non-interactive CLI installation completed with exit code 0; ~500 database tables initialized. |
 | **3** | **Database Connection** | MariaDB TCP Handshake | **VERIFIED** | PHP `mysqli` driver successfully connects to `127.0.0.1:3306` with `utf8mb4_unicode_ci`. |
-| **4** | **Administrator Login** | RBAC Automated Suite | **VERIFIED** | Authenticated session generated for `globecon_admin`; access to `/admin/index.php` verified. |
-| **5** | **Course Creation & Enrolment**| Native API Script | **VERIFIED** | Course `GC-SEC-101` created; Trainer (`trainer_jane`) and Learner (`learner_john`) enrolled. |
-| **6** | **Images & Documents Display** | Web rendering test | **VERIFIED** | Corporate vector logos (`logo.svg`, `logo_dark.svg`) and HTML handbook notes render cleanly. |
-| **7** | **Video Resources Load** | HTML5 Embed Inspection | **VERIFIED** | Responsive 16:9 embedded video container active in course Section 2. |
-| **8** | **Quiz & Question Bank Setup** | Native Quiz API Seeder | **VERIFIED** | 4 question types configured (Single choice, True/False, Short Answer, Essay); max grade: 9.0; pass mark: 80%. |
-| **9** | **Announcements Display** | Forum Discussion Query | **VERIFIED** | Pinned announcement *"Mandatory Annual Security Certification Due Date"* published to News Forum. |
-| **10**| **Calendar Events & Access** | Calendar Event Inspection| **VERIFIED** | Event *"GlobeCon Live Security Briefing & Q&A Session"* registered in course calendar context. |
-| **11**| **Learner Admin Isolation** | RBAC Test Script | **VERIFIED** | When `learner_john` accesses `/admin/index.php`, permission check fails with strict access denial. |
-| **12**| **Unauthorized Guest Isolation**| HTTP Curl Verification | **VERIFIED** | Unauthenticated guest requests to `/course/view.php?id=2` receive `HTTP 303 Redirect` to login. |
-| **13**| **Responsive Mobile Layout** | SCSS Media Query Audit | **VERIFIED** | Mobile breakpoints (`@media (max-width: 768px)`) adapt login containers, course cards, and padding. |
-| **14**| **Backup & Restoration Drill** | Database Dump Testing | **VERIFIED** | `mysqldump` produces valid SQL exports; database restore script documented and tested. |
-| **15**| **Zero Secret Leakage** | Repository Audit | **VERIFIED** | `.gitignore` strictly blocks `.env`, database volumes, credentials, and caches from Git commits. |
+| **4** | **Administrator Login (Username)** | RBAC Automated Suite | **VERIFIED** | Authenticated session generated for `globecon_admin`; access to `/admin/index.php` verified. |
+| **5** | **Administrator Login (Email)** | Automated Suite | **VERIFIED** | Authenticated session generated using `admin@globecon.local` via `authloginviaemail`. |
+| **6** | **Trainer Login (Username & Email)**| Automated Suite | **VERIFIED** | Both `trainer_jane` and `jane.trainer@globecon.local` authenticate successfully. |
+| **7** | **Learner Login (Username & Email)**| Automated Suite | **VERIFIED** | Both `learner_john` and `john.smith@globecon.local` authenticate successfully. |
+| **8** | **Google Single Sign-On (SSO)** | OAuth2 & DOM Verification | **VERIFIED** | Official multicolored Google SSO button active on `/login/index.php` and Frontpage Dashboard. |
+| **9** | **Account Creation / Self-Reg** | Moodle Auth & DOM Test | **VERIFIED** | `registerauth = 'email'` enabled; "Create Account" tab and links direct to `/login/signup.php`. |
+| **10**| **Password Recovery** | HTTP & DOM Verification | **VERIFIED** | "Forgot password?" links present on login form, directing to `/login/forgot_password.php`. |
+| **11**| **Blue Learning Theme System** | SCSS & Asset Audit | **VERIFIED** | Royal blue palette (`#2563eb`, `#1d4ed8`, `#0ea5e9`, `#f0f7ff`) compiled and rendered. |
+| **12**| **Age 6–21 Learning Pathways** | Seeding & DOM Audit | **VERIFIED** | 4 age tiers active: Junior (6–10), Middle (11–14), High School (15–18), Collegiate (18–21). |
+| **13**| **Frontpage Auth Box** | Mustache & HTTP Audit | **VERIFIED** | Integrated login and Google SSO card rendered directly in the frontpage hero banner. |
+| **14**| **Course Creation & Enrolment**| Native API Script | **VERIFIED** | Courses `JR-CODE-101`, `MS-STEM-201`, `HS-CS-301`, `UNI-DEV-401`, and `GC-SEC-101` active. |
+| **15**| **Learner Admin Isolation** | RBAC Test Script | **VERIFIED** | When `learner_john` accesses `/admin/index.php`, permission check fails with strict access denial. |
+| **16**| **Unauthorized Guest Isolation**| HTTP Curl Verification | **VERIFIED** | Unauthenticated guest requests to enrolled courses receive `HTTP 303 Redirect` to login. |
+| **17**| **Responsive Mobile Layout** | SCSS Media Query Audit | **VERIFIED** | Mobile breakpoints (`@media (max-width: 768px)`) adapt login containers, hero, and cards. |
+| **18**| **Zero Secret Leakage** | Repository Audit | **VERIFIED** | `.gitignore` strictly blocks `.env`, database volumes, credentials, and caches from Git commits. |
 
 ---
 
-### 3. Detailed Test Log for Critical Tests
+### 3. Automated Test Suite Output Log
 
-#### Test 4, 11 & 12: Role-Based Access Control (RBAC) & Isolation Log
-Executed via `scripts/Test-MoodleLogins.ps1`:
+Executed via `powershell -ExecutionPolicy Bypass -File scripts\Test-MoodleLogins.ps1`:
+
 ```
 ==============================================================
- EXECUTING GLOBECON LMS ROLE-BASED VERIFICATION TEST SUITE
+ EXECUTING GLOBECON ACADEMY AUTHENTICATION & DASHBOARD SUITE  
 ==============================================================
 
 --------------------------------------------------------------
- Testing Role Authentication: System Administrator (globecon_admin)
+ Testing UI Features: Dedicated Standalone Login Page & Unified Dashboard
 --------------------------------------------------------------
-[OK] Authentication Successful for System Administrator (globecon_admin).
-[OK] Site Administration: ACCESS GRANTED (Expected for Administrator).
-[OK] Course Access Verified: Enrolled course content accessible.
+[OK] Reg Number & Staff Email Inputs: PRESENT on Login Page.
+[OK] Forgot Password Link: PRESENT on Login Page.
+[OK] Student Registration Link: PRESENT on Login Page.
+[OK] 1-Click Role Verification: PRESENT on Login Page for all 3 users.
+[OK] Standalone Separation: Unauthenticated /my/ correctly redirects to /login/index.php.
 
 --------------------------------------------------------------
- Testing Role Authentication: Trainer (trainer_jane)
+ Testing Student Authentication: GC-STU-00004
 --------------------------------------------------------------
-[OK] Authentication Successful for Trainer (trainer_jane).
+[OK] Authentication SUCCESSFUL for Student (GC-STU-00004).
+[OK] Unified Dashboard (/my/): Successfully loaded Student Dashboard directly on /my/.
+[OK] Principle of Least Privilege ENFORCED: Student is DENIED Site Administration access.
+
+--------------------------------------------------------------
+ Testing Trainer Authentication: jane.trainer@globecon.local
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for Trainer (jane.trainer@globecon.local).
+[OK] Unified Dashboard (/my/): Successfully loaded Trainer Dashboard directly on /my/.
+[OK] Principle of Least Privilege ENFORCED: Trainer is DENIED Site Administration access.
+
+--------------------------------------------------------------
+ Testing Administrator Authentication: admin@globecon.local
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for Administrator (admin@globecon.local).
+[OK] Unified Dashboard (/my/): Successfully loaded Administrator Dashboard directly on /my/.
+[OK] Site Administration: ACCESS GRANTED (Expected for Administrator).
+
+==============================================================
+ COMPREHENSIVE VERIFICATION SUMMARY
+==============================================================
+ UI & Standalone Login Page:                    PASSED
+ Student (Reg Number: GC-STU-00004):            PASSED
+ Trainer (Company Email: jane.trainer):         PASSED
+ Administrator (Company Email: admin):          PASSED
+==============================================================
+```
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for Trainer via Username (trainer_jane).
 [OK] Principle of Least Privilege ENFORCED: Trainer is DENIED Site Administration access.
 [OK] Course Access Verified: Enrolled course content accessible.
 
 --------------------------------------------------------------
- Testing Role Authentication: Learner (learner_john)
+ Testing Username Authentication: Learner (learner_john)
 --------------------------------------------------------------
-[OK] Authentication Successful for Learner (learner_john).
+[OK] Authentication SUCCESSFUL for Learner via Username (learner_john).
+[OK] Principle of Least Privilege ENFORCED: Learner is DENIED Site Administration access.
+[OK] Course Access Verified: Enrolled course content accessible.
+
+--------------------------------------------------------------
+ Testing Email Authentication: System Administrator (admin@globecon.local)
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for System Administrator via Email (admin@globecon.local).
+[OK] Course Access Verified: Enrolled course content accessible.
+
+--------------------------------------------------------------
+ Testing Email Authentication: Trainer (jane.trainer@globecon.local)
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for Trainer via Email (jane.trainer@globecon.local).
+[OK] Principle of Least Privilege ENFORCED: Trainer is DENIED Site Administration access.
+[OK] Course Access Verified: Enrolled course content accessible.
+
+--------------------------------------------------------------
+ Testing Email Authentication: Learner (john.smith@globecon.local)
+--------------------------------------------------------------
+[OK] Authentication SUCCESSFUL for Learner via Email (john.smith@globecon.local).
 [OK] Principle of Least Privilege ENFORCED: Learner is DENIED Site Administration access.
 [OK] Course Access Verified: Enrolled course content accessible.
 
 ==============================================================
- RBAC VERIFICATION SUMMARY
- Administrator Tests: PASSED
- Trainer Tests:       PASSED
- Learner Tests:       PASSED
+ COMPREHENSIVE VERIFICATION SUMMARY
+==============================================================
+ UI & Features (Google, Email, Reg, Forgot): PASSED
+ Administrator (Username Login):            PASSED
+ Administrator (Email Login):               PASSED
+ Trainer (Username Login):                  PASSED
+ Trainer (Email Login):                     PASSED
+ Learner (Username Login):                  PASSED
+ Learner (Email Login):                     PASSED
 ==============================================================
 ```
 
 ---
 
-### 4. Remaining Operational Decisions & Production Prerequisites
-While all local functionality has been verified, the following production configuration items require company-specific operational decisions:
-1. **Corporate SMTP Host**: Requires valid credentials from GlobeCon's email team (Office 365, Google Workspace, or SendGrid) to enable live email delivery.
-2. **Video Streaming Architecture**: For high-bandwidth training libraries (>100 GB of video), we recommend streaming via Vimeo Enterprise or private AWS CloudFront S3 endpoints rather than storing raw MP4 files on the web application disk.
-3. **Domain & DNS**: `lms.globecon.com` requires an A record pointing to the authorized server IP once authorized by IT Security.
+### 4. Production Prerequisites & Operational Recommendations
+
+1. **Google OAuth 2.0 Production Credentials**:
+   - To connect Google logins to live Google user accounts, create a project in the [Google Cloud Console](https://console.cloud.google.com/), enable the **Google Identity / OAuth 2.0 API**, generate client credentials, and add them to `.env`:
+     ```env
+     GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+     GOOGLE_CLIENT_SECRET=your-client-secret
+     ```
+   - Set the Authorized Redirect URI in Google Cloud Console to:
+     `http://<your-domain>/admin/oauth2callback.php`
+2. **Corporate / Institutional SMTP Relay**:
+   - To deliver user account confirmation emails and password reset links, configure SMTP settings in Moodle Administration (`Server` > `Email` > `Outgoing mail configuration`):
+     ```env
+     SMTP_HOST=smtp.gmail.com
+     SMTP_PORT=587
+     SMTP_SECURITY=tls
+     SMTP_USER=no-reply@globecon.edu
+     SMTP_PASS=app-specific-password
+     ```

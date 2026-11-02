@@ -1,0 +1,224 @@
+{{!
+    GlobeCon LMS - Enterprise Academic Portal Login Form
+    GlobeCon Convergence Solutions
+    - Centered circular user avatar
+    - "Login to Your Account" header
+    - Role selector tabs for Student (Reg Number), Trainer (Email), Admin (Email)
+    - "User Name *" with red asterisk & "Password *" with red asterisk
+    - Remember me + Forgot password? Click Here
+    - Blue & Violet corporate button
+    - "Don't have an account. Register" link
+    - Inquiries: +254 116 993 399
+    - Demo test buttons removed per user request
+}}
+
+<div class="loginform globecon-auth-inner">
+
+    <!-- System Maintenance / Error / Info Messages -->
+    {{#maintenance}}
+        <div class="alert alert-danger login-maintenance mb-3">
+            {{{maintenance}}}
+        </div>
+    {{/maintenance}}
+    {{#error}}
+        <div class="alert alert-danger mb-3" id="loginerrormessage" role="alert">
+            <i class="fa fa-exclamation-circle me-1" aria-hidden="true"></i> {{error}}
+        </div>
+    {{/error}}
+    {{#info}}
+        <div class="alert alert-info mb-3" id="logininfomessage" role="status">
+            <i class="fa fa-info-circle me-1" aria-hidden="true"></i> {{info}}
+        </div>
+    {{/info}}
+
+    <!-- Centered User Avatar with Blue & Violet Subtle Accent -->
+    <div class="text-center mb-3">
+        <div class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm" 
+             style="width: 82px; height: 82px; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #4f46e5 100%); color: #ffffff;">
+            <i class="fa fa-user" style="font-size: 40px;" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <!-- "Login to Your Account" Title -->
+    <div class="text-center mb-3">
+        <h2 class="h4 fw-bold text-dark mb-1" style="letter-spacing: -0.3px;">Login to Your Account</h2>
+        <p class="text-muted small mb-0">GlobeCon Convergence Solutions &bull; Portal Access</p>
+    </div>
+
+    <!-- Role Switcher Tabs (Student, Trainer, Admin) -->
+    <div class="globecon-role-tabs mb-4" role="tablist">
+        <div class="nav nav-pills nav-fill p-1 bg-light rounded-pill border" role="tablist">
+            <button type="button" class="nav-link active rounded-pill py-1 px-3 fw-semibold small text-primary bg-white shadow-sm" id="tab-student" role="tab" aria-selected="true" onclick="globeconSelectRole('student')">
+                <span class="me-1">🎓</span> Student
+            </button>
+            <button type="button" class="nav-link rounded-pill py-1 px-3 fw-semibold small text-secondary" id="tab-trainer" role="tab" aria-selected="false" onclick="globeconSelectRole('trainer')">
+                <span class="me-1">👩‍🏫</span> Trainer
+            </button>
+            <button type="button" class="nav-link rounded-pill py-1 px-3 fw-semibold small text-secondary" id="tab-admin" role="tab" aria-selected="false" onclick="globeconSelectRole('admin')">
+                <span class="me-1">👑</span> Admin
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Moodle Login Form -->
+    {{#showloginform}}
+        <form class="login-form" action="{{loginurl}}" method="post" id="login">
+            <input id="anchor" type="hidden" name="anchor" value="">
+            <script>document.getElementById('anchor').value = location.hash;</script>
+            <input type="hidden" name="logintoken" value="{{logintoken}}">
+
+            <!-- 1. User Name / Registration Number / Email Input -->
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label fw-semibold text-dark mb-1" id="usernameLabel" style="font-size: 0.9rem;">
+                    User Name <span class="text-danger fw-bold">*</span>
+                </label>
+                <div class="input-group">
+                    <input type="text" name="username" id="username" 
+                           class="form-control rounded-1 py-2 px-3" 
+                           value="{{username}}" 
+                           placeholder="GC-STU-XXXXX (e.g. GC-STU-00004)" 
+                           autocomplete="username" required
+                           style="border: 1px solid #ced4da; font-size: 0.95rem;">
+                </div>
+                <div class="form-text small mt-1 text-muted" id="roleHelperText">
+                    <span class="badge bg-primary text-white me-1">Student</span> Sign in with your official <strong>Registration Number</strong> (e.g. <code>GC-STU-00004</code>)
+                </div>
+            </div>
+
+            <!-- 2. Password Input -->
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label fw-semibold text-dark mb-1" style="font-size: 0.9rem;">
+                    Password <span class="text-danger fw-bold">*</span>
+                </label>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" 
+                           class="form-control rounded-1 py-2 px-3 border-end-0" 
+                           placeholder="Enter your password" 
+                           autocomplete="current-password" required
+                           style="border: 1px solid #ced4da; font-size: 0.95rem;">
+                    <button class="btn btn-outline-secondary bg-white border-start-0 rounded-1" type="button" id="togglePasswordBtn" onclick="globeconTogglePassword()" title="Show/hide password" style="border-color: #ced4da;">
+                        <i class="fa fa-eye text-muted" id="passwordEyeIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            {{#recaptcha}}
+                <div class="login-form-recaptcha mb-3">
+                    {{{recaptcha}}}
+                </div>
+            {{/recaptcha}}
+
+            <!-- 3. Remember Me & Forgot Password Row -->
+            <div class="d-flex justify-content-between align-items-center mb-4" style="font-size: 0.88rem;">
+                <div class="form-check text-start">
+                    <input class="form-check-input" type="checkbox" name="rememberusername" id="rememberusername" value="1">
+                    <label class="form-check-label text-muted" for="rememberusername">
+                        Remember me
+                    </label>
+                </div>
+                <div>
+                    <span class="text-muted">Forgot password? </span>
+                    <a href="{{forgotpasswordurl}}" class="text-primary text-decoration-none fw-semibold">Click Here</a>
+                </div>
+            </div>
+
+            <!-- 4. Blue & Violet Corporate Login Button -->
+            <div class="mb-3">
+                <button class="btn w-100 text-white fw-bold py-2 rounded-1 shadow-sm d-flex align-items-center justify-content-center gap-2" 
+                        type="submit" id="loginbtn" 
+                        style="background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #6366f1 100%); border: none; font-size: 1rem; letter-spacing: 0.5px; height: 44px;">
+                    <span>Login</span>
+                </button>
+            </div>
+
+            <!-- 5. Register Link -->
+            <div class="text-center mb-3" style="font-size: 0.9rem;">
+                <span class="text-muted">Don't have an account. </span>
+                <a href="{{#signupurl}}{{signupurl}}{{/signupurl}}{{^signupurl}}{{config.wwwroot}}/login/signup.php{{/signupurl}}" class="text-primary text-decoration-none fw-semibold" id="studentRegisterLink">
+                    Register
+                </a>
+            </div>
+
+            <!-- 6. Inquiry & Support Line -->
+            <div class="text-center pt-2 small text-muted border-top">
+                <i class="fa fa-phone text-primary me-1"></i> For any inquiry: 
+                <a href="tel:+254116993399" class="text-dark fw-bold text-decoration-none">
+                    +254 116 993 399
+                </a>
+            </div>
+
+        </form>
+    {{/showloginform}}
+
+</div>
+
+<script>
+function globeconSelectRole(role) {
+    var tabs = ['student', 'trainer', 'admin'];
+    tabs.forEach(function(r) {
+        var el = document.getElementById('tab-' + r);
+        if (el) {
+            if (r === role) {
+                el.classList.add('active', 'bg-white', 'shadow-sm', 'text-primary');
+                el.classList.remove('text-secondary');
+                el.setAttribute('aria-selected', 'true');
+            } else {
+                el.classList.remove('active', 'bg-white', 'shadow-sm', 'text-primary');
+                el.classList.add('text-secondary');
+                el.setAttribute('aria-selected', 'false');
+            }
+        }
+    });
+
+    var label = document.getElementById('usernameLabel');
+    var input = document.getElementById('username');
+    var hint = document.getElementById('roleHelperText');
+
+    if (role === 'student') {
+        if (label) label.innerHTML = 'Student Registration Number <span class="text-danger fw-bold">*</span>';
+        if (input) input.placeholder = 'GC-STU-XXXXX (e.g. GC-STU-00004)';
+        if (hint) hint.innerHTML = '<span class="badge bg-primary text-white me-1">Student</span> Sign in with your official <strong>Registration Number</strong> (e.g. <code>GC-STU-00004</code>)';
+    } else if (role === 'trainer') {
+        if (label) label.innerHTML = 'Trainer Company Email <span class="text-danger fw-bold">*</span>';
+        if (input) input.placeholder = 'e.g. jane.trainer@globecon.local';
+        if (hint) hint.innerHTML = '<span class="badge bg-info text-dark me-1">Trainer</span> Sign in with your official <strong>Company Email</strong> (e.g. <code>jane.trainer@globecon.local</code>)';
+    } else if (role === 'admin') {
+        if (label) label.innerHTML = 'Administrator Email <span class="text-danger fw-bold">*</span>';
+        if (input) input.placeholder = 'e.g. admin@globecon.local';
+        if (hint) hint.innerHTML = '<span class="badge bg-danger text-white me-1">Admin</span> Sign in with your administrative <strong>Company Email</strong> (e.g. <code>admin@globecon.local</code>)';
+    }
+}
+
+function globeconTogglePassword() {
+    var pwd = document.getElementById('password');
+    var icon = document.getElementById('passwordEyeIcon');
+    if (pwd) {
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            if (icon) {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        } else {
+            pwd.type = 'password';
+            if (icon) {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    }
+}
+</script>
+
+{{#js}}
+require(['core/pending'], function(Pending) {
+    var errorMessageDiv = document.getElementById('loginerrormessage');
+    if (errorMessageDiv) {
+        var usernameField = document.getElementById('username');
+        if (usernameField) usernameField.focus();
+    }
+});
+require(['core_form/submit'], function(Submit) {
+    Submit.init("loginbtn");
+});
+{{/js}}

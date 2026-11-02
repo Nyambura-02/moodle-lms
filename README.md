@@ -36,12 +36,16 @@ To start the Apache web server and MariaDB database services:
    http://localhost:8000
    ```
 
-### Default Credentials (Local Test Environment)
-| Role | Username | Password | Purpose |
-| :--- | :--- | :--- | :--- |
-| **System Administrator** | `globecon_admin` | `GlobeCon@2026!Secure` | Full platform configuration, user management, and audit logs. |
-| **Trainer / Instructor** | `trainer_jane` | `Trainer@2026!Pass` | Course authoring, content upload, question bank, and grading. |
-| **Learner / Employee** | `learner_john` | `Learner@2026!Pass` | Course navigation, viewing notes/videos, quiz attempts, progress tracking. |
+### Default Credentials & User Roles
+| User Role | Login Identifier | Password | Dashboard Experience (/my/) | Scope & Permissions |
+| :--- | :--- | :--- | :--- | :--- |
+| **Student (Learner)** | **Registration Number**: `GC-STU-00004` (or `gc-stu-00004`) | `Learner@2026!Pass` | **Student Learning Portal**: Enrolled courses, registration number badge, age-cohort roadmap (Ages 6–21), course progress, grades, trainer support. | Enrolled courses and self-progress only. Strictly denied Site Administration. |
+| **Trainer (Instructor)** | **Company Email**: `jane.trainer@globecon.local` | `Trainer@2026!Pass` | **Trainer Mentorship Portal**: Authorized teaching cohorts, active student rosters, 1-click quiz & materials authoring, gradebook. | Course management and grading within assigned cohorts. Strictly denied Site Administration. |
+| **System Administrator** | **Company Email**: `admin@globecon.local` | `GlobeCon@2026!Secure` | **Executive Administration Portal**: Real-time system health metrics, full user register directory, curriculum matrix, settings + 1-click role view switcher. | Full platform governance, settings, user creation, and audit logs. |
+
+> **Architecture Note**: 
+> - **Login Page**: Standalone dedicated page at [`/login/index.php`](http://localhost:8000/login/index.php).
+> - **Unified Dashboard**: Single unified page at [`/my/`](http://localhost:8000/my/). The system dynamically detects the authenticated user's role and renders their dedicated dashboard view directly on `/my/` without external URL fragmentation. Unauthenticated visitors accessing `/my/` are automatically routed to `/login/index.php`.
 
 ### Stopping the LMS
 Double-click `stop_moodle.bat` in the project root (or run `powershell scripts\Stop-Moodle.ps1`).

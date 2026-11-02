@@ -18,9 +18,9 @@ Write-Host "==========================================================" -Foregro
 # 1. Start MariaDB if not already running
 $dbProc = Get-Process -Name "mysqld", "mariadbd" -ErrorAction SilentlyContinue
 if ($dbProc) {
-    Write-Host "[✓] Database service is already running (PID: $($dbProc.Id -join ', '))." -ForegroundColor Green
+    Write-Host '[*] Database service is already running (PID: ' + ($dbProc.Id -join ', ') + ').' -ForegroundColor Green
 } else {
-    Write-Host "[...] Starting Database service..." -ForegroundColor Yellow
+    Write-Host '[...] Starting Database service...' -ForegroundColor Yellow
     $dbExe = Join-Path $MariadbDir "bin\mysqld.exe"
     $dbIni = Join-Path $MariadbDir "bin\my.ini"
     if (Test-Path $dbExe) {
@@ -28,9 +28,9 @@ if ($dbProc) {
         Start-Sleep -Seconds 3
         $dbProc = Get-Process -Name "mysqld", "mariadbd" -ErrorAction SilentlyContinue
         if ($dbProc) {
-            Write-Host "[✓] Database service started successfully." -ForegroundColor Green
+            Write-Host '[OK] Database service started successfully.' -ForegroundColor Green
         } else {
-            Write-Host "[!] Database service failed to start immediately. Check database logs." -ForegroundColor Red
+            Write-Host '[!] Database service failed to start immediately. Check database logs.' -ForegroundColor Red
         }
     } else {
         Write-Host "[!] Database executable not found at: $dbExe" -ForegroundColor Red
@@ -40,18 +40,18 @@ if ($dbProc) {
 # 2. Start Apache if not already running
 $httpdProc = Get-Process -Name "httpd" -ErrorAction SilentlyContinue
 if ($httpdProc) {
-    Write-Host "[✓] Apache web server is already running (PID: $($httpdProc.Id -join ', '))." -ForegroundColor Green
+    Write-Host '[*] Apache web server is already running (PID: ' + ($httpdProc.Id -join ', ') + ').' -ForegroundColor Green
 } else {
-    Write-Host "[...] Starting Apache web server on port 8000..." -ForegroundColor Yellow
+    Write-Host '[...] Starting Apache web server on port 8000...' -ForegroundColor Yellow
     $httpdExe = Join-Path $ApacheDir "bin\httpd.exe"
     if (Test-Path $httpdExe) {
         Start-Process -FilePath $httpdExe -WindowStyle Hidden
         Start-Sleep -Seconds 2
         $httpdProc = Get-Process -Name "httpd" -ErrorAction SilentlyContinue
         if ($httpdProc) {
-            Write-Host "[✓] Apache web server started successfully." -ForegroundColor Green
+            Write-Host '[OK] Apache web server started successfully.' -ForegroundColor Green
         } else {
-            Write-Host "[!] Apache web server failed to start. Check server\apache\logs\error.log." -ForegroundColor Red
+            Write-Host '[!] Apache web server failed to start. Check server\apache\logs\error.log.' -ForegroundColor Red
         }
     } else {
         Write-Host "[!] Apache executable not found at: $httpdExe" -ForegroundColor Red

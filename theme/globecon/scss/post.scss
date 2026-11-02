@@ -1,24 +1,33 @@
 /* ==============================================================================
- * GlobeCon Convergence Solutions - Corporate Learning Portal Theme (post.scss)
- * Modern, clean, responsive UI built on Bootstrap 5 / Boost foundations.
+ * GlobeCon LMS - Youth & Young Adult Learning Portal (Ages 6-21)
+ * Modern, clean, vibrant Blue & Purple responsive theme built on Boost & Bootstrap 5.
+ * Extracted directly from official GlobeCon Convergence Solutions identity.
  * ============================================================================== */
 
 :root {
-    --globecon-primary: #0f2942;
-    --globecon-primary-light: #1e3a8a;
-    --globecon-accent: #0284c7;
-    --globecon-accent-hover: #0369a1;
-    --globecon-bg-light: #f8fafc;
+    --globecon-primary: #6d28d9;        /* Official GlobeCon Rich Purple */
+    --globecon-primary-light: #7c3aed;  /* Vibrant Violet */
+    --globecon-primary-dark: #4c1d95;   /* Deep Royal Purple */
+    --globecon-blue: #2563eb;           /* Convergence Solutions Royal Blue */
+    --globecon-blue-dark: #1d4ed8;      /* Deep Royal Blue */
+    --globecon-blue-navy: #1e1b4b;      /* Deep Midnight Indigo */
+    --globecon-accent: #0ea5e9;         /* Electric Cyan */
+    --globecon-accent-hover: #0284c7;   /* Deep Cyan */
+    --globecon-purple-accent: #a855f7;  /* Bright Lilac */
+    --globecon-warning: #f59e0b;        /* Amber / Warm Accent */
+    --globecon-success: #10b981;        /* Emerald Green */
+    --globecon-bg-light: #f8f7ff;       /* Very Soft Lavender Tint */
     --globecon-surface: #ffffff;
-    --globecon-text-dark: #1e293b;
-    --globecon-text-muted: #64748b;
+    --globecon-text-dark: #0f172a;      /* Slate 900 */
+    --globecon-text-muted: #64748b;     /* Slate 500 */
     --globecon-border: #e2e8f0;
-    --globecon-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
-    --globecon-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
-    --globecon-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
-    --globecon-radius-sm: 6px;
-    --globecon-radius-md: 10px;
-    --globecon-radius-lg: 16px;
+    --globecon-shadow-sm: 0 1px 3px rgba(109, 40, 217, 0.08);
+    --globecon-shadow-md: 0 4px 6px -1px rgba(109, 40, 217, 0.12), 0 2px 4px -2px rgba(37, 99, 235, 0.08);
+    --globecon-shadow-lg: 0 12px 24px -4px rgba(109, 40, 217, 0.16), 0 4px 8px -4px rgba(37, 99, 235, 0.1);
+    --globecon-radius-sm: 8px;
+    --globecon-radius-md: 12px;
+    --globecon-radius-lg: 18px;
+    --globecon-radius-pill: 9999px;
 }
 
 body {
@@ -29,13 +38,13 @@ body {
 }
 
 /* ------------------------------------------------------------------------------
- * 1. Global Navigation Bar & Header
+ * 1. Global Navigation Bar & Top Header (Blue & Purple Gradient)
  * ------------------------------------------------------------------------------ */
 .navbar-bootswatch,
 .navbar.fixed-top,
 .primary-navigation {
-    background-color: var(--globecon-primary) !important;
-    border-bottom: 2px solid var(--globecon-accent) !important;
+    background: linear-gradient(90deg, #1e1b4b 0%, #3b0764 35%, #6d28d9 70%, #2563eb 100%) !important;
+    border-bottom: 2px solid #a855f7 !important;
     box-shadow: var(--globecon-shadow-md) !important;
     transition: all 0.2s ease-in-out;
 }
@@ -44,7 +53,7 @@ body {
 .navbar .site-name,
 .navbar .navbar-brand {
     color: #ffffff !important;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.2px;
 }
 
@@ -52,15 +61,14 @@ body {
 .navbar .nav-link:focus,
 .navbar .nav-link.active {
     color: #38bdf8 !important;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.12);
     border-radius: var(--globecon-radius-sm);
 }
 
 .navbar .divider {
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* User Profile Menu in Navbar */
 .usermenu .dropdown-toggle {
     color: #ffffff !important;
     font-weight: 600;
@@ -73,243 +81,370 @@ body {
 }
 
 /* ------------------------------------------------------------------------------
- * 2. Branded Login Screen
+ * 2. Dashboard Hero Banner (Blue & Purple Spectrum)
  * ------------------------------------------------------------------------------ */
-.pagelayout-login {
-    background: linear-gradient(135deg, #091e3a 0%, #0f2942 50%, #0369a1 100%) !important;
-    min-height: 100vh;
-}
-
-.pagelayout-login #page-wrapper {
-    background: transparent !important;
-}
-
-.pagelayout-login .login-container {
-    max-width: 440px;
-    margin: 4rem auto;
-    padding: 0 1rem;
-}
-
-.pagelayout-login .loginform {
-    background: var(--globecon-surface);
+.globecon-dashboard-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #3b0764 55%, #6d28d9 85%, #2563eb 100%) !important;
     border-radius: var(--globecon-radius-lg);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 2.5rem 2rem;
+    margin: 1rem 0.5rem 2rem 0.5rem;
+    box-shadow: 0 15px 35px -5px rgba(109, 40, 217, 0.3);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(168, 85, 247, 0.25) !important;
 }
 
-.pagelayout-login .loginform::before {
+.globecon-dashboard-hero::before {
     content: "";
     position: absolute;
-    top: 0;
+    top: -60px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(37, 99, 235, 0.15) 50%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.age-track-chip {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: default;
+}
+
+.age-track-chip:hover {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Dashboard Embedded Auth Card */
+.globecon-dashboard-auth-box {
+    border-radius: var(--globecon-radius-lg) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(109, 40, 217, 0.18) !important;
+    box-shadow: 0 20px 30px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(109, 40, 217, 0.15) !important;
+}
+
+/* ------------------------------------------------------------------------------
+ * 3. Google Single Sign-On (SSO) Button
+ * ------------------------------------------------------------------------------ */
+.btn-google-sso {
+    background-color: #ffffff !important;
+    color: #1f1f1f !important;
+    border: 1px solid #dadce0 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem !important;
+    border-radius: var(--globecon-radius-sm) !important;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-decoration: none !important;
+}
+
+.btn-google-sso:hover {
+    background-color: #f8fafd !important;
+    border-color: #c2e7ff !important;
+    box-shadow: 0 3px 6px rgba(60, 64, 67, 0.15) !important;
+    transform: translateY(-1px);
+    color: #1f1f1f !important;
+}
+
+.btn-google-sso:active {
+    background-color: #edf2fc !important;
+    transform: translateY(0);
+}
+
+.google-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------------------
+ * 4. Auth Divider & Tabs
+ * ------------------------------------------------------------------------------ */
+.globecon-divider {
+    position: relative;
+    text-align: center;
+}
+
+.globecon-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
     left: 0;
     right: 0;
-    height: 6px;
-    background: linear-gradient(90deg, var(--globecon-primary), var(--globecon-accent));
+    height: 1px;
+    background-color: #e2e8f0;
 }
 
-.pagelayout-login .login-logo {
-    text-align: center;
-    margin-bottom: 1.5rem;
+.globecon-divider .divider-text {
+    position: relative;
+    background-color: #ffffff;
+    padding: 0 0.75rem;
 }
 
-.pagelayout-login .login-heading {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--globecon-primary);
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.pagelayout-login .login-subheading {
+.globecon-auth-tabs .nav-link {
     font-size: 0.9rem;
+    font-weight: 600;
     color: var(--globecon-text-muted);
-    text-align: center;
-    margin-bottom: 1.75rem;
+    border-radius: var(--globecon-radius-sm);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
-.pagelayout-login .btn-primary {
+.globecon-auth-tabs .nav-link.active {
     background-color: var(--globecon-primary) !important;
-    border-color: var(--globecon-primary) !important;
+    color: #ffffff !important;
+    box-shadow: var(--globecon-shadow-sm);
+}
+
+.globecon-brand-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--globecon-primary), var(--globecon-accent));
+    color: #ffffff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 10px rgba(29, 78, 216, 0.3);
+}
+
+/* ------------------------------------------------------------------------------
+ * 5. Academic Institutional Login Portal (MKU Screenshot Style)
+ * ------------------------------------------------------------------------------ */
+html.pagelayout-login,
+body.pagelayout-login,
+body#page-login-index,
+body#page-login-signup,
+body#page-login-forgot_password {
+    background: #f4f6f9 !important;
+    background-color: #f4f6f9 !important;
+    background-image: none !important;
+    min-height: 100vh !important;
+}
+
+.pagelayout-login {
+    background: #f4f6f9 !important;
+    background-color: #f4f6f9 !important;
+    background-image: none !important;
+}
+
+/* Eliminate Boost's default gray-100 to gray-300 gradient on #page */
+.pagelayout-login #page-wrapper,
+.globecon-login-page #page-wrapper,
+#page-login-signup #page-wrapper,
+#page-login-index #page-wrapper,
+#page-login-forgot_password #page-wrapper,
+.globecon-login-page,
+.pagelayout-login #page,
+.globecon-login-page #page,
+.pagelayout-login #page.container,
+.pagelayout-login #page.container-xl,
+.pagelayout-login #region-main-box,
+.pagelayout-login #region-main,
+.pagelayout-login div[role="main"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Institutional Top Navbar */
+.globecon-top-nav {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    .nav-link {
+        color: #1e293b !important;
+        font-size: 0.95rem;
+        transition: color 0.15s ease;
+        &:hover {
+            color: #0c3260 !important;
+        }
+    }
+}
+
+/* Dark Navy Breadcrumb Bar */
+.globecon-breadcrumb-banner {
+    background-color: #0c3260 !important;
+    .breadcrumb-item a {
+        color: #93c5fd !important;
+        &:hover {
+            color: #ffffff !important;
+        }
+    }
+    .breadcrumb-item.active {
+        color: #ffffff !important;
+    }
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+}
+
+/* Right Main Menu List */
+.globecon-login-page .list-group-item-action {
+    color: #0d6efd !important;
+    font-weight: 500;
+    font-size: 0.92rem;
+    transition: background 0.15s ease, padding-left 0.15s ease;
+    border-color: #edf2f7 !important;
+    &:hover {
+        background-color: #f8fafc !important;
+        color: #0a58ca !important;
+        padding-left: 1.25rem !important;
+    }
+}
+
+/* Centered Login Card & Inputs (Blue & Violet Palette) */
+.globecon-login-page .card-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #6366f1 100%) !important;
+    color: #ffffff !important;
+}
+
+.globecon-auth-inner {
+    .form-control {
+        border: 1px solid #ced4da !important;
+        border-radius: 4px !important;
+        padding: 0.6rem 0.85rem !important;
+        font-size: 0.95rem !important;
+        background-color: #ffffff !important;
+        &:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+        }
+    }
+    #loginbtn {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #6366f1 100%) !important;
+        color: #ffffff !important;
+        border-radius: 4px !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        transition: all 0.2s ease !important;
+        &:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #4f46e5 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35) !important;
+        }
+    }
+}
+
+/* Role Selector Tabs */
+.globecon-role-tabs {
+    .nav-pills {
+        background-color: #e9ecef !important;
+    }
+    .nav-link {
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        &.active {
+            background-color: #ffffff !important;
+            color: #2563eb !important;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+        }
+    }
+}
+
+/* Remove Teacher Contact details (Jane Doe, Admin User) on courses */
+.coursebox .teachers,
+.coursebox ul.teachers,
+.coursebox .teachers li,
+.course-contacts,
+.teachers-list,
+.coursebox .content .teachers {
+    display: none !important;
+}
+
+/* ------------------------------------------------------------------------------
+ * 6. Form Controls & Buttons
+ * ------------------------------------------------------------------------------ */
+.form-control {
+    border-radius: var(--globecon-radius-sm);
+    border: 1px solid #cbd5e1;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--globecon-primary-light);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6d28d9 0%, #2563eb 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
     font-weight: 600;
     padding: 0.65rem 1.25rem;
     border-radius: var(--globecon-radius-sm);
     transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(109, 40, 217, 0.25);
 }
 
-.pagelayout-login .btn-primary:hover {
-    background-color: var(--globecon-primary-light) !important;
-    border-color: var(--globecon-primary-light) !important;
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #7c3aed 0%, #0ea5e9 100%) !important;
     transform: translateY(-1px);
-    box-shadow: var(--globecon-shadow-md);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
 }
 
 /* ------------------------------------------------------------------------------
- * 3. Learner Dashboard & Course Cards
+ * 7. Course Cards & Age Group Badges
  * ------------------------------------------------------------------------------ */
 .dashboard-card-deck .dashboard-card,
-.block_myoverview .dashboard-card {
+.block_myoverview .dashboard-card,
+.frontpage-course-list-all .coursebox {
     border-radius: var(--globecon-radius-md) !important;
-    border: 1px solid var(--globecon-border) !important;
+    border: 1px solid #dbeafe !important;
     box-shadow: var(--globecon-shadow-sm) !important;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     overflow: hidden;
     background: var(--globecon-surface);
+    margin-bottom: 1.25rem;
+    padding: 1.25rem;
 }
 
-.dashboard-card-deck .dashboard-card:hover,
-.block_myoverview .dashboard-card:hover {
-    transform: translateY(-4px);
+.frontpage-course-list-all .coursebox:hover {
+    transform: translateY(-3px);
     box-shadow: var(--globecon-shadow-lg) !important;
-    border-color: #cbd5e1 !important;
+    border-color: #93c5fd !important;
 }
 
-.dashboard-card .dashboard-card-img {
-    height: 160px;
-    background-size: cover;
-    background-position: center;
-    border-bottom: 1px solid var(--globecon-border);
+.frontpage-course-list-all .coursebox .coursename a {
+    color: var(--globecon-primary) !important;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-.dashboard-card .dashboard-card-footer {
-    background-color: #ffffff;
-    border-top: 1px solid var(--globecon-border);
-    padding: 0.75rem 1rem;
+.frontpage-course-list-all .coursebox .coursename a:hover {
+    color: var(--globecon-accent-hover) !important;
 }
 
 /* Course Progress Bar */
 .progress {
-    height: 8px !important;
+    height: 10px !important;
     border-radius: 9999px !important;
     background-color: #e2e8f0 !important;
     overflow: hidden;
 }
 
 .progress-bar {
-    background: linear-gradient(90deg, var(--globecon-primary), var(--globecon-accent)) !important;
+    background: linear-gradient(90deg, #2563eb, #0ea5e9) !important;
     border-radius: 9999px !important;
     transition: width 0.6s ease;
 }
 
-/* ------------------------------------------------------------------------------
- * 4. Course Page Content, Modules & Activities
- * ------------------------------------------------------------------------------ */
-.course-content ul.topics li.section,
-.course-content ul.weeks li.section {
-    background: var(--globecon-surface);
-    border-radius: var(--globecon-radius-md);
-    border: 1px solid var(--globecon-border);
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
-    box-shadow: var(--globecon-shadow-sm);
+/* Footer Styling */
+footer#page-footer {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-top: 3px solid var(--globecon-accent) !important;
+    padding: 2rem 0;
 }
 
-.course-content .sectionname {
-    color: var(--globecon-primary);
-    font-weight: 700;
-    font-size: 1.25rem;
-    border-bottom: 2px solid #f1f5f9;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.activity-item {
-    border-radius: var(--globecon-radius-sm);
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    transition: background-color 0.15s ease;
-}
-
-.activity-item:hover {
-    background-color: #f1f5f9;
-}
-
-/* Activity Icons */
-.activityiconcontainer {
-    border-radius: var(--globecon-radius-sm) !important;
-}
-
-/* ------------------------------------------------------------------------------
- * 5. Announcements, Forums & Alerts
- * ------------------------------------------------------------------------------ */
-.forumpost {
-    border-radius: var(--globecon-radius-md) !important;
-    border: 1px solid var(--globecon-border) !important;
-    box-shadow: var(--globecon-shadow-sm);
-    overflow: hidden;
-    margin-bottom: 1.25rem;
-}
-
-.forumpost .header {
-    background-color: #f8fafc;
-    border-bottom: 1px solid var(--globecon-border);
-    padding: 0.75rem 1.25rem;
-}
-
-.alert-info {
-    background-color: #e0f2fe !important;
-    border-color: #bae6fd !important;
-    color: #0369a1 !important;
-    border-radius: var(--globecon-radius-sm);
-}
-
-/* ------------------------------------------------------------------------------
- * 6. Calendar & Upcoming Events
- * ------------------------------------------------------------------------------ */
-.maincalendar .calendarmonth td.hasevents {
-    background-color: #e0f2fe !important;
-    font-weight: bold;
-    border-radius: 4px;
-}
-
-.eventlist .event {
-    border-left: 4px solid var(--globecon-accent) !important;
-    border-radius: var(--globecon-radius-sm);
-    box-shadow: var(--globecon-shadow-sm);
-    background: #ffffff;
-    margin-bottom: 0.75rem;
-    padding: 0.75rem 1rem;
-}
-
-/* ------------------------------------------------------------------------------
- * 7. Buttons and Accessibility
- * ------------------------------------------------------------------------------ */
-.btn-primary {
-    background-color: var(--globecon-primary);
-    border-color: var(--globecon-primary);
-}
-
-.btn-primary:hover,
-.btn-primary:focus {
-    background-color: var(--globecon-primary-light);
-    border-color: var(--globecon-primary-light);
-}
-
-.btn-secondary {
-    background-color: #e2e8f0;
-    border-color: #cbd5e1;
-    color: var(--globecon-text-dark);
-}
-
-.btn-secondary:hover {
-    background-color: #cbd5e1;
-    color: #0f172a;
-}
-
-/* ------------------------------------------------------------------------------
- * 8. Responsive Breakpoints
- * ------------------------------------------------------------------------------ */
-@media (max-width: 768px) {
-    .pagelayout-login .login-container {
-        margin: 2rem auto;
-        padding: 0 0.75rem;
-    }
-    .pagelayout-login .loginform {
-        padding: 1.5rem 1.25rem;
-    }
-    .course-content ul.topics li.section {
-        padding: 0.85rem;
-    }
+footer#page-footer a {
+    color: #38bdf8 !important;
 }

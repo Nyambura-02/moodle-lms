@@ -19,20 +19,20 @@ defined('MOODLE_INTERNAL') || die();
 if ($ADMIN->fulltree) {
     $settings = new admin_settingpage('themesettingglobecon', get_string('configtitle', 'theme_globecon'));
 
-    // Brand Primary Color Setting
+    // Brand Primary Color Setting (Vibrant Royal Blue for Ages 6-21)
     $name = 'theme_globecon/brandcolor';
     $title = get_string('brandcolor', 'theme_globecon');
     $description = get_string('brandcolor_desc', 'theme_globecon');
-    $default = '#0f2942'; // Corporate Deep Navy
+    $default = '#2563eb'; // Vibrant Royal Blue
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $settings->add($setting);
 
-    // Accent Secondary Color Setting
+    // Accent Secondary Color Setting (Energetic Sky Cyan)
     $name = 'theme_globecon/accentcolor';
     $title = get_string('accentcolor', 'theme_globecon');
     $description = get_string('accentcolor_desc', 'theme_globecon');
-    $default = '#0284c7'; // Corporate Electric Cyan
+    $default = '#0ea5e9'; // Energetic Sky Cyan
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $settings->add($setting);

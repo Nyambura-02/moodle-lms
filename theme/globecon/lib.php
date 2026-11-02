@@ -45,10 +45,10 @@ function theme_globecon_pluginfile($course, $cm, $context, $filearea, $args, $fo
 function theme_globecon_get_pre_scss($theme) {
     $scss = '';
     
-    // Primary Brand Color (Corporate Navy Blue)
-    $brandcolor = !empty($theme->settings->brandcolor) ? $theme->settings->brandcolor : '#0f2942';
-    // Accent / Secondary Color (Corporate Electric Cyan/Teal)
-    $accentcolor = !empty($theme->settings->accentcolor) ? $theme->settings->accentcolor : '#0284c7';
+    // Primary Brand Color (Vibrant Royal Blue for Ages 6-21)
+    $brandcolor = !empty($theme->settings->brandcolor) ? $theme->settings->brandcolor : '#2563eb';
+    // Accent / Secondary Color (Energetic Sky Cyan)
+    $accentcolor = !empty($theme->settings->accentcolor) ? $theme->settings->accentcolor : '#0ea5e9';
 
     $scss .= "\$primary: {$brandcolor} !default;\n";
     $scss .= "\$info: {$accentcolor} !default;\n";
