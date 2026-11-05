@@ -71,6 +71,7 @@ RUN a2enmod rewrite headers
 COPY theme/globecon/ /var/www/html/theme/globecon/
 COPY custom/moodle/ /var/www/html/
 COPY custom/lang/ /var/www/moodledata_preset_lang/
+COPY scripts/ /var/www/html/scripts/
 
 # 7. Create data directory with proper Apache ownership
 RUN mkdir -p /var/www/moodledata && chown -R www-data:www-data /var/www/moodledata /var/www/html
@@ -84,3 +85,4 @@ EXPOSE 80
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
+
