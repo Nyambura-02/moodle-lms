@@ -12,7 +12,8 @@ An enterprise corporate learning portal developed for **GlobeCon Convergence Sol
 ## Quick Navigation
 - [System Architecture](docs/ARCHITECTURE.md)
 - [Local Installation & Startup](docs/LOCAL_DEVELOPMENT.md)
-- [Production Deployment Guide](docs/PRODUCTION_DEPLOYMENT.md)
+- [Cloud Deployment (Railway & Render)](docs/CLOUD_DEPLOYMENT.md)
+- [Production Deployment Guide (VPS / Docker)](docs/PRODUCTION_DEPLOYMENT.md)
 - [Roles & Permissions Governance](docs/ROLES_PERMISSIONS.md)
 - [Sample Course Curriculum](docs/SAMPLE_COURSE_SPEC.md)
 - [Cybersecurity Hardening & Checklist](docs/SECURITY.md)

@@ -13,3 +13,4 @@ $string['suspended'] = 'Deactivated';
 $string['courseoverview'] = 'Learning path overview';
 $string['courserequests'] = 'Learning path requests';
 $string['stickyblockscourseview'] = 'Learning path page';
+

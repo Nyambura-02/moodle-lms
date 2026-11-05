@@ -14,3 +14,4 @@ $string['useraccountactive'] = 'User account active';
 $string['allcourses'] = 'All learning paths';
 $string['backtocourselist'] = 'Back to learning paths';
 $string['editcoursesettings'] = 'Edit learning path settings';
+
