@@ -21,6 +21,7 @@ server/mysql/data/
 *.zip
 *.tar.gz
 *.exe
+
 README.txt
 
 # Caches and Temporary Files
