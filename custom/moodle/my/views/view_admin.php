@@ -42,7 +42,7 @@ $recent_users = $DB->get_records_sql("
     LIMIT 20
 ");
 
-// 3. Fetch Curriculum Tracks & Course Matrix
+// 3. Fetch Learning Paths & Curriculum Matrix
 $curriculum_tracks = $DB->get_records_sql("
     SELECT c.id, c.fullname, c.shortname, c.idnumber, c.visible,
            (SELECT COUNT(DISTINCT ue.userid) 
@@ -121,9 +121,9 @@ $curriculum_tracks = $DB->get_records_sql("
             <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 border-start border-purple border-4" style="border-left-color: #7c3aed !important;">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <div class="text-muted small fw-semibold text-uppercase">Curriculum Tracks</div>
+                        <div class="text-muted small fw-semibold text-uppercase">Learning Paths</div>
                         <div class="fs-3 fw-bold text-dark mt-1"><?php echo $total_courses; ?> Active</div>
-                        <small class="text-muted">7 Official Tracks</small>
+                        <small class="text-muted">Curriculum Learning Paths</small>
                     </div>
                     <div class="bg-purple bg-opacity-10 text-purple rounded-circle p-3 fs-4" style="background-color: #f3e8ff; color: #7c3aed;">
                         <i class="fa fa-book-open"></i>
@@ -137,7 +137,7 @@ $curriculum_tracks = $DB->get_records_sql("
                     <div>
                         <div class="text-muted small fw-semibold text-uppercase">Security &amp; Health</div>
                         <div class="fs-3 fw-bold text-dark mt-1"><?php echo $total_admins; ?> Admins</div>
-                        <small class="text-warning"><?php echo $total_suspended; ?> Suspended</small>
+                        <small class="text-warning"><?php echo $total_suspended; ?> Deactivated</small>
                     </div>
                     <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 fs-4">
                         <i class="fa fa-shield"></i>
@@ -155,7 +155,7 @@ $curriculum_tracks = $DB->get_records_sql("
                     <i class="fa fa-user-plus me-1"></i> Add New User
                 </a>
                 <a href="<?php echo $CFG->wwwroot; ?>/course/edit.php?category=1" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm">
-                    <i class="fa fa-plus-circle me-1"></i> Create Course Track
+                    <i class="fa fa-plus-circle me-1"></i> Create Learning Path
                 </a>
                 <a href="<?php echo $CFG->wwwroot; ?>/admin/settings.php?section=themesettingglobecon" class="btn btn-sm btn-info text-dark rounded-pill px-3 shadow-sm">
                     <i class="fa fa-paint-brush me-1"></i> Theme &amp; Brand Settings
@@ -174,7 +174,7 @@ $curriculum_tracks = $DB->get_records_sql("
     <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded-4 shadow-sm border" id="adminDashboardTabs" role="tablist">
         <li class="nav-item">
             <button class="nav-link active rounded-pill px-4 fw-semibold" id="tab-courses-btn" onclick="switchAdminTab('courses')">
-                <i class="fa fa-book me-1"></i> Curriculum Tracks &amp; Courses (<?php echo $total_courses; ?>)
+                <i class="fa fa-road me-1"></i> Learning Paths (<?php echo $total_courses; ?>)
             </button>
         </li>
         <li class="nav-item">
@@ -194,11 +194,11 @@ $curriculum_tracks = $DB->get_records_sql("
         <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
             <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
                 <div>
-                    <h5 class="fw-bold text-dark mb-0">Active Curriculum Tracks &amp; Enrollment Matrix</h5>
-                    <p class="text-muted small mb-0">Courses currently published on GlobeCon LMS with syllabus codes and enrollment tallies</p>
+                    <h5 class="fw-bold text-dark mb-0">Active Learning Paths &amp; Enrollment Matrix</h5>
+                    <p class="text-muted small mb-0">Learning paths currently published on GlobeCon LMS with syllabus codes and enrollment tallies</p>
                 </div>
                 <a href="<?php echo $CFG->wwwroot; ?>/course/edit.php?category=1" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                    <i class="fa fa-plus me-1"></i> New Course
+                    <i class="fa fa-plus me-1"></i> New Learning Path
                 </a>
             </div>
             <div class="card-body px-4">
@@ -207,7 +207,7 @@ $curriculum_tracks = $DB->get_records_sql("
                         <thead class="table-light">
                             <tr class="small text-muted text-uppercase">
                                 <th>Code</th>
-                                <th>Course Title</th>
+                                <th>Learning Path Title</th>
                                 <th>Enrollment</th>
                                 <th>Status</th>
                                 <th class="text-end">Manage</th>
@@ -306,7 +306,7 @@ $curriculum_tracks = $DB->get_records_sql("
                                     </td>
                                     <td>
                                         <?php if ($u->suspended): ?>
-                                            <span class="badge bg-warning text-dark rounded-pill">Suspended</span>
+                                            <span class="badge bg-warning text-dark rounded-pill">Deactivated</span>
                                         <?php else: ?>
                                             <span class="badge bg-success rounded-pill">Active</span>
                                         <?php endif; ?>

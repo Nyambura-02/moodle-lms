@@ -289,7 +289,7 @@ echo $OUTPUT->header();
 
                 <?php if (!empty($success_user['courses'])): ?>
                     <div class="mt-3 p-3 bg-white rounded-3 border">
-                        <span class="text-muted small text-uppercase fw-semibold"><i class="fa fa-book text-primary me-1"></i> Auto-Enrolled Courses:</span>
+                        <span class="text-muted small text-uppercase fw-semibold"><i class="fa fa-road text-primary me-1"></i> Auto-Enrolled Learning Paths:</span>
                         <div class="d-flex flex-wrap gap-2 mt-2">
                             <?php foreach ($success_user['courses'] as $cname): ?>
                                 <span class="badge bg-light text-dark border px-2 py-1"><i class="fa fa-check text-success me-1"></i> <?php echo s($cname); ?></span>
@@ -448,8 +448,8 @@ echo $OUTPUT->header();
                 <!-- Course Enrollment Selection -->
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="form-label fw-bold text-dark mb-0">Course Enrollment(s)</label>
-                        <button type="button" class="btn btn-link btn-sm text-decoration-none p-0" onclick="selectAllCourses()">Select All</button>
+                        <label class="form-label fw-bold text-dark mb-0">Learning Path Enrollment(s)</label>
+                        <button type="button" class="btn btn-link btn-sm text-decoration-none p-0" onclick="selectAllCourses()">Select All Learning Paths</button>
                     </div>
                     <div class="p-3 bg-light rounded-3 border" style="max-height: 240px; overflow-y: auto;">
                         <div class="row g-2">

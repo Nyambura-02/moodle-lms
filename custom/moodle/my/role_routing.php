@@ -73,7 +73,7 @@ function globecon_get_role_dashboard_url($role) {
         case 'STUDENT':
             return $CFG->wwwroot . '/my/';
         case 'SUSPENDED':
-            return $CFG->wwwroot . '/my/account_status.php?status=suspended';
+            return $CFG->wwwroot . '/my/account_status.php?status=deactivated';
         case 'UNRECOGNIZED':
         default:
             return $CFG->wwwroot . '/my/account_status.php?status=unrecognized';
@@ -92,7 +92,7 @@ function globecon_enforce_dashboard_access($allowed_roles) {
     $actual_role = globecon_get_user_role($USER->id);
 
     if ($actual_role === 'SUSPENDED') {
-        redirect(new moodle_url('/my/account_status.php', ['status' => 'suspended']));
+        redirect(new moodle_url('/my/account_status.php', ['status' => 'deactivated']));
         exit;
     }
 

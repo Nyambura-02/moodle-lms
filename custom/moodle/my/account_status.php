@@ -19,11 +19,11 @@ echo $OUTPUT->header();
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg border-0 rounded-4 p-4 text-center">
                 <div class="mb-3">
-                    <?php if ($status === 'suspended'): ?>
+                    <?php if ($status === 'deactivated' || $status === 'suspended'): ?>
                         <div class="display-4 text-danger mb-2"><i class="fa fa-ban"></i></div>
-                        <h3 class="fw-bold text-danger">Account Suspended</h3>
+                        <h3 class="fw-bold text-danger">Account Deactivated</h3>
                         <p class="text-secondary mt-3">
-                            Your GlobeCon LMS account has been temporarily suspended or deactivated by an administrator.
+                            Your GlobeCon LMS account has been deactivated by an administrator.
                         </p>
                     <?php else: ?>
                         <div class="display-4 text-warning mb-2"><i class="fa fa-exclamation-triangle"></i></div>

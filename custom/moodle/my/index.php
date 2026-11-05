@@ -24,7 +24,7 @@ if (isguestuser()) {
 $user_role = globecon_get_user_role($USER->id);
 
 if ($user_role === 'SUSPENDED') {
-    redirect(new moodle_url('/my/account_status.php', ['status' => 'suspended']));
+    redirect(new moodle_url('/my/account_status.php', ['status' => 'deactivated']));
 }
 if ($user_role === 'UNRECOGNIZED') {
     redirect(new moodle_url('/my/account_status.php', ['status' => 'unrecognized']));
