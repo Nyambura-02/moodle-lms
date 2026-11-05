@@ -1,0 +1,450 @@
+/* ==============================================================================
+ * GlobeCon LMS - Youth & Young Adult Learning Portal (Ages 6-21)
+ * Modern, clean, vibrant Blue & Purple responsive theme built on Boost & Bootstrap 5.
+ * Extracted directly from official GlobeCon Convergence Solutions identity.
+ * ============================================================================== */
+
+:root {
+    --globecon-primary: #6d28d9;        /* Official GlobeCon Rich Purple */
+    --globecon-primary-light: #7c3aed;  /* Vibrant Violet */
+    --globecon-primary-dark: #4c1d95;   /* Deep Royal Purple */
+    --globecon-blue: #2563eb;           /* Convergence Solutions Royal Blue */
+    --globecon-blue-dark: #1d4ed8;      /* Deep Royal Blue */
+    --globecon-blue-navy: #1e1b4b;      /* Deep Midnight Indigo */
+    --globecon-accent: #0ea5e9;         /* Electric Cyan */
+    --globecon-accent-hover: #0284c7;   /* Deep Cyan */
+    --globecon-purple-accent: #a855f7;  /* Bright Lilac */
+    --globecon-warning: #f59e0b;        /* Amber / Warm Accent */
+    --globecon-success: #10b981;        /* Emerald Green */
+    --globecon-bg-light: #f8f7ff;       /* Very Soft Lavender Tint */
+    --globecon-surface: #ffffff;
+    --globecon-text-dark: #0f172a;      /* Slate 900 */
+    --globecon-text-muted: #64748b;     /* Slate 500 */
+    --globecon-border: #e2e8f0;
+    --globecon-shadow-sm: 0 1px 3px rgba(109, 40, 217, 0.08);
+    --globecon-shadow-md: 0 4px 6px -1px rgba(109, 40, 217, 0.12), 0 2px 4px -2px rgba(37, 99, 235, 0.08);
+    --globecon-shadow-lg: 0 12px 24px -4px rgba(109, 40, 217, 0.16), 0 4px 8px -4px rgba(37, 99, 235, 0.1);
+    --globecon-radius-sm: 8px;
+    --globecon-radius-md: 12px;
+    --globecon-radius-lg: 18px;
+    --globecon-radius-pill: 9999px;
+}
+
+body {
+    background-color: var(--globecon-bg-light);
+    color: var(--globecon-text-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------------------
+ * 1. Global Navigation Bar & Top Header (Blue & Purple Gradient)
+ * ------------------------------------------------------------------------------ */
+.navbar-bootswatch,
+.navbar.fixed-top,
+.primary-navigation {
+    background: linear-gradient(90deg, #1e1b4b 0%, #3b0764 35%, #6d28d9 70%, #2563eb 100%) !important;
+    border-bottom: 2px solid #a855f7 !important;
+    box-shadow: var(--globecon-shadow-md) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar .nav-link,
+.navbar .site-name,
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active {
+    color: #38bdf8 !important;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: var(--globecon-radius-sm);
+}
+
+.navbar .divider {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.usermenu .dropdown-toggle {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.usermenu .dropdown-menu {
+    border-radius: var(--globecon-radius-md);
+    box-shadow: var(--globecon-shadow-lg);
+    border: 1px solid var(--globecon-border);
+}
+
+/* ------------------------------------------------------------------------------
+ * 2. Dashboard Hero Banner (Blue & Purple Spectrum)
+ * ------------------------------------------------------------------------------ */
+.globecon-dashboard-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #3b0764 55%, #6d28d9 85%, #2563eb 100%) !important;
+    border-radius: var(--globecon-radius-lg);
+    margin: 1rem 0.5rem 2rem 0.5rem;
+    box-shadow: 0 15px 35px -5px rgba(109, 40, 217, 0.3);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(168, 85, 247, 0.25) !important;
+}
+
+.globecon-dashboard-hero::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(37, 99, 235, 0.15) 50%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.age-track-chip {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: default;
+}
+
+.age-track-chip:hover {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Dashboard Embedded Auth Card */
+.globecon-dashboard-auth-box {
+    border-radius: var(--globecon-radius-lg) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(109, 40, 217, 0.18) !important;
+    box-shadow: 0 20px 30px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(109, 40, 217, 0.15) !important;
+}
+
+/* ------------------------------------------------------------------------------
+ * 3. Google Single Sign-On (SSO) Button
+ * ------------------------------------------------------------------------------ */
+.btn-google-sso {
+    background-color: #ffffff !important;
+    color: #1f1f1f !important;
+    border: 1px solid #dadce0 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem !important;
+    border-radius: var(--globecon-radius-sm) !important;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.08) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-decoration: none !important;
+}
+
+.btn-google-sso:hover {
+    background-color: #f8fafd !important;
+    border-color: #c2e7ff !important;
+    box-shadow: 0 3px 6px rgba(60, 64, 67, 0.15) !important;
+    transform: translateY(-1px);
+    color: #1f1f1f !important;
+}
+
+.btn-google-sso:active {
+    background-color: #edf2fc !important;
+    transform: translateY(0);
+}
+
+.google-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------------------
+ * 4. Auth Divider & Tabs
+ * ------------------------------------------------------------------------------ */
+.globecon-divider {
+    position: relative;
+    text-align: center;
+}
+
+.globecon-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e2e8f0;
+}
+
+.globecon-divider .divider-text {
+    position: relative;
+    background-color: #ffffff;
+    padding: 0 0.75rem;
+}
+
+.globecon-auth-tabs .nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--globecon-text-muted);
+    border-radius: var(--globecon-radius-sm);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.globecon-auth-tabs .nav-link.active {
+    background-color: var(--globecon-primary) !important;
+    color: #ffffff !important;
+    box-shadow: var(--globecon-shadow-sm);
+}
+
+.globecon-brand-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--globecon-primary), var(--globecon-accent));
+    color: #ffffff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 10px rgba(29, 78, 216, 0.3);
+}
+
+/* ------------------------------------------------------------------------------
+ * 5. Academic Institutional Login Portal (MKU Screenshot Style)
+ * ------------------------------------------------------------------------------ */
+html.pagelayout-login,
+body.pagelayout-login,
+body#page-login-index,
+body#page-login-signup,
+body#page-login-forgot_password {
+    background: #f4f6f9 !important;
+    background-color: #f4f6f9 !important;
+    background-image: none !important;
+    min-height: 100vh !important;
+}
+
+.pagelayout-login {
+    background: #f4f6f9 !important;
+    background-color: #f4f6f9 !important;
+    background-image: none !important;
+}
+
+/* Eliminate Boost's default gray-100 to gray-300 gradient on #page */
+.pagelayout-login #page-wrapper,
+.globecon-login-page #page-wrapper,
+#page-login-signup #page-wrapper,
+#page-login-index #page-wrapper,
+#page-login-forgot_password #page-wrapper,
+.globecon-login-page,
+.pagelayout-login #page,
+.globecon-login-page #page,
+.pagelayout-login #page.container,
+.pagelayout-login #page.container-xl,
+.pagelayout-login #region-main-box,
+.pagelayout-login #region-main,
+.pagelayout-login div[role="main"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Institutional Top Navbar */
+.globecon-top-nav {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    .nav-link {
+        color: #1e293b !important;
+        font-size: 0.95rem;
+        transition: color 0.15s ease;
+        &:hover {
+            color: #0c3260 !important;
+        }
+    }
+}
+
+/* Dark Navy Breadcrumb Bar */
+.globecon-breadcrumb-banner {
+    background-color: #0c3260 !important;
+    .breadcrumb-item a {
+        color: #93c5fd !important;
+        &:hover {
+            color: #ffffff !important;
+        }
+    }
+    .breadcrumb-item.active {
+        color: #ffffff !important;
+    }
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+}
+
+/* Right Main Menu List */
+.globecon-login-page .list-group-item-action {
+    color: #0d6efd !important;
+    font-weight: 500;
+    font-size: 0.92rem;
+    transition: background 0.15s ease, padding-left 0.15s ease;
+    border-color: #edf2f7 !important;
+    &:hover {
+        background-color: #f8fafc !important;
+        color: #0a58ca !important;
+        padding-left: 1.25rem !important;
+    }
+}
+
+/* Centered Login Card & Inputs (Blue & Violet Palette) */
+.globecon-login-page .card-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #6366f1 100%) !important;
+    color: #ffffff !important;
+}
+
+.globecon-auth-inner {
+    .form-control {
+        border: 1px solid #ced4da !important;
+        border-radius: 4px !important;
+        padding: 0.6rem 0.85rem !important;
+        font-size: 0.95rem !important;
+        background-color: #ffffff !important;
+        &:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+        }
+    }
+    #loginbtn {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #6366f1 100%) !important;
+        color: #ffffff !important;
+        border-radius: 4px !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        transition: all 0.2s ease !important;
+        &:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #4f46e5 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35) !important;
+        }
+    }
+}
+
+/* Role Selector Tabs */
+.globecon-role-tabs {
+    .nav-pills {
+        background-color: #e9ecef !important;
+    }
+    .nav-link {
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        &.active {
+            background-color: #ffffff !important;
+            color: #2563eb !important;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+        }
+    }
+}
+
+/* Remove Teacher Contact details (Jane Doe, Admin User) on courses */
+.coursebox .teachers,
+.coursebox ul.teachers,
+.coursebox .teachers li,
+.course-contacts,
+.teachers-list,
+.coursebox .content .teachers {
+    display: none !important;
+}
+
+/* ------------------------------------------------------------------------------
+ * 6. Form Controls & Buttons
+ * ------------------------------------------------------------------------------ */
+.form-control {
+    border-radius: var(--globecon-radius-sm);
+    border: 1px solid #cbd5e1;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--globecon-primary-light);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6d28d9 0%, #2563eb 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--globecon-radius-sm);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(109, 40, 217, 0.25);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #7c3aed 0%, #0ea5e9 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
+}
+
+/* ------------------------------------------------------------------------------
+ * 7. Course Cards & Age Group Badges
+ * ------------------------------------------------------------------------------ */
+.dashboard-card-deck .dashboard-card,
+.block_myoverview .dashboard-card,
+.frontpage-course-list-all .coursebox {
+    border-radius: var(--globecon-radius-md) !important;
+    border: 1px solid #dbeafe !important;
+    box-shadow: var(--globecon-shadow-sm) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    background: var(--globecon-surface);
+    margin-bottom: 1.25rem;
+    padding: 1.25rem;
+}
+
+.frontpage-course-list-all .coursebox:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--globecon-shadow-lg) !important;
+    border-color: #93c5fd !important;
+}
+
+.frontpage-course-list-all .coursebox .coursename a {
+    color: var(--globecon-primary) !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.frontpage-course-list-all .coursebox .coursename a:hover {
+    color: var(--globecon-accent-hover) !important;
+}
+
+/* Course Progress Bar */
+.progress {
+    height: 10px !important;
+    border-radius: 9999px !important;
+    background-color: #e2e8f0 !important;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #2563eb, #0ea5e9) !important;
+    border-radius: 9999px !important;
+    transition: width 0.6s ease;
+}
+
+/* Footer Styling */
+footer#page-footer {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-top: 3px solid var(--globecon-accent) !important;
+    padding: 2rem 0;
+}
+
+footer#page-footer a {
+    color: #38bdf8 !important;
+}

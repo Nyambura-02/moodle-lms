@@ -1,0 +1,217 @@
+{{!
+    GlobeCon LMS - Enterprise Portal Layout
+    GlobeCon Convergence Solutions
+    Features:
+    - Institutional Top Navigation Bar (Branding, Programs Dropdown, Contact: +254 116 993 399)
+    - Corporate Blue & Violet Theme
+    - Dark Navy Breadcrumb Bar (Home / Login)
+    - Centered Academic Login Card (Main Menu removed)
+}}
+{{> theme_boost/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+
+<div id="page-wrapper" class="globecon-login-page">
+
+    {{{ output.standard_top_of_body_html }}}
+
+    <!-- 1. Top Navigation Bar: GlobeCon Convergence Solutions -->
+    <header class="globecon-top-nav bg-white border-bottom shadow-sm py-2">
+        <div class="container-xl d-flex flex-wrap justify-content-between align-items-center">
+            <!-- Brand / Logo -->
+            <a href="{{config.wwwroot}}/" class="d-flex align-items-center text-decoration-none py-1">
+                <img src="{{config.wwwroot}}/theme/globecon/pix/logo.svg" alt="GlobeCon Convergence Solutions" height="46" class="me-2" onerror="this.onerror=null; this.src='{{logourl}}';">
+                <div>
+                    <span class="fs-4 fw-bold text-dark" style="letter-spacing: -0.5px;">GlobeCon</span>
+                    <span class="fs-4 fw-bold" style="color: #2563eb; letter-spacing: -0.5px;"> Convergence Solutions</span>
+                    <div class="text-muted text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.8px;">Enterprise &amp; Technical Learning Portal</div>
+                </div>
+            </a>
+
+            <!-- Navigation Links & Inquiry Contact -->
+            <div class="d-flex align-items-center gap-3 gap-md-4 mt-2 mt-md-0">
+                <nav class="d-none d-md-flex align-items-center gap-3">
+                    <a href="{{config.wwwroot}}/" class="nav-link text-dark fw-semibold px-2 py-1">About Us</a>
+                    
+                    <!-- Programs Dropdown (Comprehensive Course Catalog) -->
+                    <div class="dropdown">
+                        <a href="{{config.wwwroot}}/programs.php" class="nav-link text-dark fw-semibold px-2 py-1 dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Programs
+                        </a>
+                        <ul class="dropdown-menu shadow border-0 py-2" style="min-width: 380px; max-height: 480px; overflow-y: auto;">
+                            <li class="dropdown-header text-uppercase fw-bold text-primary small px-3 pt-2">
+                                <i class="fa fa-shield me-1"></i> Corporate &amp; Security Tracks
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">GlobeCon Fundamentals</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Corporate Security &amp; Operational Excellence</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Cybersecurity <span class="badge bg-light text-primary border font-monospace ms-1">cybersec</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Defensive security, threat governance &amp; risk</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Digital &amp; Workplace IT Skills <span class="badge bg-light text-primary border font-monospace ms-1">D1, D2</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Cloud productivity &amp; enterprise infrastructure</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Cyber Security &amp; Online Safety <span class="badge bg-light text-primary border font-monospace ms-1">A5, B5, C4, D4</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Encryption, ethical hacking &amp; threat mitigation</div>
+                                </a>
+                            </li>
+
+                            <li class="dropdown-divider my-2"></li>
+                            <li class="dropdown-header text-uppercase fw-bold text-primary small px-3">
+                                <i class="fa fa-code me-1"></i> Software &amp; Cloud Development
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Full-Stack Web Dev &amp; Cloud <span class="badge bg-light text-primary border font-monospace ms-1">UNI-DEV-401</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">API design, TypeScript, containers &amp; microservices</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Web Programming <span class="badge bg-light text-primary border font-monospace ms-1">B2, C1, D5</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">HTML5, CSS3, JavaScript &amp; full-stack integration</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Text-Based Programming <span class="badge bg-light text-primary border font-monospace ms-1">C2</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Python syntax, data structures &amp; algorithmic scripting</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Python Data Science &amp; Cyber <span class="badge bg-light text-primary border font-monospace ms-1">HS-CS-301</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Algorithmic problem solving &amp; network defense</div>
+                                </a>
+                            </li>
+
+                            <li class="dropdown-divider my-2"></li>
+                            <li class="dropdown-header text-uppercase fw-bold text-primary small px-3">
+                                <i class="fa fa-microchip me-1"></i> AI, Robotics &amp; STEM Foundations
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Artificial Intelligence &amp; Chatbots <span class="badge bg-light text-primary border font-monospace ms-1">A4, B4, C3, D3</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Machine learning, LLM prompting &amp; chatbots</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Robotics &amp; Physical Computing <span class="badge bg-light text-primary border font-monospace ms-1">A3, B3, B8</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Micro-controllers, sensors &amp; physical hardware</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">STEM Robotics &amp; Web Makers <span class="badge bg-light text-primary border font-monospace ms-1">MS-STEM-201</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Sensor mechanics &amp; collaborative digital makers</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Computational Thinking &amp; Scratch <span class="badge bg-light text-primary border font-monospace ms-1">A1-A6, B1, B6, B7, C5, D6</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Scratch block coding &amp; computational logic</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3" href="{{config.wwwroot}}/programs.php">
+                                    <div class="fw-bold small text-dark">Creative Computing &amp; Story Coding <span class="badge bg-light text-primary border font-monospace ms-1">JR-CODE-101</span></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Visual storytelling &amp; digital safety foundations</div>
+                                </a>
+                            </li>
+
+                            <li class="dropdown-divider my-2"></li>
+                            <li>
+                                <a class="dropdown-item text-center fw-bold text-primary py-2 small" href="{{config.wwwroot}}/programs.php">
+                                    View All Curriculum Tracks &amp; Syllabi <i class="fa fa-arrow-right ms-1"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="mailto:support@globecon.ac.ke" class="nav-link text-dark fw-semibold px-2 py-1">Contact Us</a>
+                </nav>
+
+                <!-- Inquiry Contact Phone Badge -->
+                <div class="d-flex align-items-center gap-2 px-3 py-1 bg-light rounded-pill border">
+                    <i class="fa fa-phone text-primary" aria-hidden="true"></i>
+                    <span class="small text-muted d-none d-sm-inline">Inquiries:</span>
+                    <a href="tel:+254116993399" class="small fw-bold text-dark text-decoration-none">
+                        +254 116 993 399
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Dark Navy Breadcrumb Bar (Home / Login) -->
+    <div class="globecon-breadcrumb-banner py-2" style="background-color: #0c3260;">
+        <div class="container-xl">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 py-1" style="background: transparent;">
+                    <li class="breadcrumb-item">
+                        <a href="{{config.wwwroot}}/" class="text-white text-decoration-none">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active text-white fw-bold" aria-current="page">
+                        Login
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 3. Main Centered Login Section (Main Menu Removed) -->
+    <main id="page" class="container-xl my-4 py-3">
+        <div class="row justify-content-center">
+            
+            <div class="col-12 col-md-9 col-lg-7 col-xl-5">
+                <div class="card border rounded-2 shadow-sm overflow-hidden" style="background-color: #ffffff; border-color: #dee2e6;">
+                    
+                    <!-- Blue & Violet Corporate Header Bar -->
+                    <div class="card-header text-white px-3 py-2 fw-bold d-flex align-items-center gap-2" 
+                         style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #6366f1 100%); font-size: 1.15rem; border: none; border-radius: 0;">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <span>GlobeCon Portal Login</span>
+                    </div>
+
+                    <!-- Body: Centered Login Form -->
+                    <div class="card-body p-4 p-md-5">
+                        {{{ output.main_content }}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-4 text-center text-muted small">
+        <div class="container-xl">
+            &copy; {{#str}}year, core{{/str}} GlobeCon Convergence Solutions. All rights reserved. &bull; 
+            Inquiries: <a href="tel:+254116993399" class="text-dark fw-semibold text-decoration-none">+254 116 993 399</a> &bull; 
+            Email: <a href="mailto:support@globecon.ac.ke" class="text-primary text-decoration-none">support@globecon.ac.ke</a>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>
+{{#js}}
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+  M.util.js_complete('theme_boost/loader');
+});
+{{/js}}
